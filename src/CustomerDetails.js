@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import  React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import customer_url from "./api/customerapi";
 import './CustomerDetails.css';
