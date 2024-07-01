@@ -135,7 +135,7 @@ const[file ,setFile]=useState('');
 
     try {
         // Send a POST request to upload the file
-        const response = await axios.post(`${booking_url}/Demo/upload/${bookId}`, formData, {
+        const response =  axios.post(`${booking_url}/Demo/upload/${bookId}`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
