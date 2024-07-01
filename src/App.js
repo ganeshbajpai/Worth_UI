@@ -1,4 +1,4 @@
-import React, { Components, useState } from "react";
+import React, { } from "react";
 
 import "./App.css";
 
@@ -22,7 +22,7 @@ import BookingDetails from "./BookingDetails";
 import BookingEdit from "./BookingEdit";
 
 
-import { LoginForm, isLoggedIn } from "./components/LoginForm/LoginForm";
+import { LoginForm } from "./components/LoginForm/LoginForm";
 import RegisterPage from "./components/Register/RegisterPage";
 import Delivered from "./Delivered";
 import Intransit from "./Intransit";

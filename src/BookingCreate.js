@@ -45,7 +45,7 @@ const BookingCreate = () => {
 // State to store consignor names fetched from the API
 const [consignorNames, setConsignorNames] = useState([]);
 const [isSubmitting, setIsSubmitting] = useState(false); // State to track submission status
-  const [] = useState(false);
+  // const [] = useState(false);
 
   const navigate = useNavigate();
   useEffect(() => {

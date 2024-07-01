@@ -8,7 +8,7 @@ import booking_url from "./api/bookingApi";
 const BookingEdit = () => {
   const { bookId } = useParams();
 
-  const [] = useState({});
+  // const [] = useState({});
   const [isUpdating, setIsUpdating] = useState(false); // State to track updating status
   useEffect(() => {
     fetch(`${booking_url}/Demo/booking/` + bookId)

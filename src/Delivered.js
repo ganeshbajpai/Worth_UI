@@ -65,7 +65,7 @@ const Delivered = () => {
 
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  // const indexOfFirstPost = indexOfLastPost - postsPerPage;
   // const currentPosts = bookdata.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
