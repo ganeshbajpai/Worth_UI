@@ -150,7 +150,7 @@ const[file ,setFile]=useState('');
         console.error("Error uploading file:", error);
         alert("Failed to upload file.");
     }
-};
+
   return (
     <div>
       <div className="row">
@@ -288,5 +288,4 @@ const[file ,setFile]=useState('');
     </div>
   );
 };
-
 export default BookingEdit;
