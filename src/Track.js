@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import { Button, Card, Input, Table } from "reactstrap";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
@@ -12,9 +12,9 @@ function Track() {
   const [query, setQuery] = useState("");
   const printRef = useRef();
 
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-  });
+  // const handlePrint = useReactToPrint({
+  //   content: () => printRef.current,
+  // });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,10 +32,10 @@ function Track() {
     }
   };
 
-  const reset = () => {
-    setQuery("");
-    setGetuserdata([]); // Clear the data
-  };
+  // const reset = () => {
+  //   setQuery("");
+  //   setGetuserdata([]); // Clear the data
+  // };
 
   return (
     <div className="tracking-container">

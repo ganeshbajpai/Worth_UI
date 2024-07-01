@@ -8,7 +8,7 @@ import booking_url from "./api/bookingApi";
 const BookingEdit = () => {
   const { bookId } = useParams();
 
-  const [bookdata, bookdatachange] = useState({});
+  const [] = useState({});
   const [isUpdating, setIsUpdating] = useState(false); // State to track updating status
   useEffect(() => {
     fetch(`${booking_url}/Demo/booking/` + bookId)
@@ -65,8 +65,8 @@ const BookingEdit = () => {
   const [remarks, remarkschange] = useState("");
   const [trackLocation, trackLocationchange] = useState("");
 
-  const [active, activechange] = useState(true);
-  const [validation, valchange] = useState(false);
+  // const [active, activechange] = useState(true);
+  // const [validation, valchange] = useState(false);
 
   const navigate = useNavigate();
 const[file ,setFile]=useState('');
@@ -120,15 +120,15 @@ const[file ,setFile]=useState('');
         console.log(err.message);
       });
   };
-  const handleFileChange = (e) => {
-    // Update the file state when a file is selected
-    setFile(e.target.files[0]);
-  };
-  const uploadFile = async () => {
-    if (!file) {
-        alert("Please select a file.");
-        return;
-    }
+  // const handleFileChange = (e) => {
+  //   // Update the file state when a file is selected
+  //   setFile(e.target.files[0]);
+  // };
+  // const uploadFile = async () => {
+  //   if (!file) {
+  //       alert("Please select a file.");
+  //       return;
+  //   }
 
     const formData = new FormData();
     formData.append("file", file);

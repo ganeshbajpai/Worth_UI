@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { Button, Table } from "reactstrap";
 import { toast } from "react-toastify";
 import './BookingListing.css';
-import axios from "axios";
+// import axios from "axios";
 import booking_url from "./api/bookingApi";
 
 const Delivered = () => {
@@ -66,10 +66,10 @@ const Delivered = () => {
   // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = bookdata.slice(indexOfFirstPost, indexOfLastPost);
+  // const currentPosts = bookdata.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Filter data based on search query
   const filteredData = bookdata.filter(item =>

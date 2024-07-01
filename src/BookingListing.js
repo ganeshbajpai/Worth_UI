@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, Table } from "reactstrap";
 import { toast } from "react-toastify";
 import './BookingListing.css';
-import { Outlet } from 'react-router-dom';
+// import { Outlet } from 'react-router-dom';
 import booking_url from "./api/bookingApi";
 const BookingListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,24 +16,24 @@ const BookingListing = () => {
     navigate("/main/booking/details/" + bookingId);
   };
 
-  const LoadEdit = (bookingId) => {
-    navigate("/main/booking/edit/" + bookingId);
-  };
+  // const LoadEdit = (bookingId) => {
+  //   navigate("/main/booking/edit/" + bookingId);
+  // };
 
-  const Removefunction = (bookingId) => {
-    if (window.confirm("Do you want to remove?")) {
-      fetch(`${booking_url}/Demo/deleteBooking/` + bookingId, {
-        method: "DELETE",
-      })
-        .then((res) => {
-          alert("Removed Successfully");
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    }
-  };
+  // const Removefunction = (bookingId) => {
+  //   if (window.confirm("Do you want to remove?")) {
+  //     fetch(`${booking_url}/Demo/deleteBooking/` + bookingId, {
+  //       method: "DELETE",
+  //     })
+  //       .then((res) => {
+  //         alert("Removed Successfully");
+  //         window.location.reload();
+  //       })
+  //       .catch((err) => {
+  //         console.log(err.message);
+  //       });
+  //   }
+  // };
 
   const exportToCsv = () => {
     if (bookdata.length === 0) {
@@ -78,7 +78,7 @@ const BookingListing = () => {
   const currentPosts = filteredData.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "reactstrap";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import './BookingListing.css';
 import booking_url from "./api/bookingApi";
@@ -20,9 +20,9 @@ const Intransit = () => {
     navigate("/main/booking/edit/" + bookingId);
   };
 
-  const Removefunction = (bookingId) => {
-    // Remove function logic
-  };
+  // const Removefunction = (bookingId) => {
+  //   // Remove function logic
+  // };
 
   const exportToCsv = () => {
     const header = Object.keys(bookdata[0]).join(",") + "\n";
@@ -62,7 +62,7 @@ const Intransit = () => {
   const currentPosts = filteredData.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div>

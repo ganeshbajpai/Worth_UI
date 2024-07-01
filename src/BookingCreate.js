@@ -1,18 +1,15 @@
 import React, { useState,useEffect } from "react";
-import { Link, json, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import customer_url from "./api/customerapi";
 import './BookingCreate.css';
 import booking_url from "./api/bookingApi";
 import {
-  FormGroup,
-  Label,
+  
   Input,
-  Form,
+  
   Container,
   Button,
-  Row,
-  Col,
-  Progress,
+  
 } from "reactstrap";
 
 
@@ -48,7 +45,7 @@ const BookingCreate = () => {
 // State to store consignor names fetched from the API
 const [consignorNames, setConsignorNames] = useState([]);
 const [isSubmitting, setIsSubmitting] = useState(false); // State to track submission status
-  const [validation, valchange] = useState(false);
+  const [] = useState(false);
 
   const navigate = useNavigate();
   useEffect(() => {

@@ -4,7 +4,7 @@ import { FaUser, FaLock, FaPhone } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import axios from 'axios'; // Import axios for making HTTP requests
 import login_url from '../../api/loginApi';
-import { Link, json, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 const RegisterPage = () => {
     // State variables to store form data
     const [email, setEmail] = useState('');

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Link, json, useNavigate } from 'react-router-dom';
+import { Link,  useNavigate } from 'react-router-dom';
 import customer_url from "./api/customerapi";
-import { FormGroup,Label,Input,Form,Container,Button,Row,Col} from "reactstrap";
+import { Button} from "reactstrap";
 const CustomerCreate = () => {
 
-const[customerId,customerIdchange]=useState("");
+const[customerId]=useState("");
 const[company_Name,company_Namechange]=useState("");
 const[company_Address,company_Addresschange]=useState("");
 const[city,citychange]=useState("");
@@ -15,8 +15,8 @@ const[contact_Person,contact_Personchange]=useState("");
 const[contact_Number,contact_Numberchange]=useState("");
 const[emailId,emailIdchange]=useState("");
 const[gstNo,gstNochange]=useState("");
-const[active,activechange]=useState(true);
-const[validation,valchange]=useState(false);
+const[active]=useState(true);
+const[valchange]=useState(false);
 
 const navigate=useNavigate();
 

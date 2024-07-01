@@ -1,38 +1,37 @@
 import React, { Components, useState } from "react";
-import logo from "./logo.svg";
+
 import "./App.css";
 
 import CustomerListing from "./CustomerListing";
-import { BrowserRouter as Router, Route, Switch, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CustomerCreate from "./CustomerCreate";
 import CustomerDetails from "./CustomerDetails";
 import CustomerEdit from "./CustomerEdit";
-import { Button, Container, Col, Row } from "reactstrap";
+import {  Container, Col, Row } from "reactstrap";
 
-import Header from "./components/Header";
+
 
 import Home from "./Home";
 
 import Details from "./Details";
-import Tracking from "./components/Tracking";
+
 import Contact from "./components/Contact";
 import BookingListing from "./BookingListing";
 import BookingCreate from "./BookingCreate";
 import BookingDetails from "./BookingDetails";
 import BookingEdit from "./BookingEdit";
-import SearchBar from "./components/Tracking";
-import axios from "axios";
+
+
 import { LoginForm, isLoggedIn } from "./components/LoginForm/LoginForm";
 import RegisterPage from "./components/Register/RegisterPage";
 import Delivered from "./Delivered";
 import Intransit from "./Intransit";
-import Footer from "./Footer";
 
-import Sidebar from "./Sidebar";
+
+
 import Track from "./Track";
 import Main from "./Main";
-import Privateroute from "./Privateroute";
-import LogoutButton from "./Logout";
+
 
 
 

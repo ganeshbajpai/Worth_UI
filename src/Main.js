@@ -1,12 +1,12 @@
-import React, { useEffect, useState }  from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import React, {  useState }  from 'react';
+// import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Container, Col, Row } from "reactstrap";
 import Header from "./components/Header";
 import Sidebar from "./Sidebar";
-import Track from "./Track";
-import BookingListing from "./BookingListing";
+// import Track from "./Track";
+// import BookingListing from "./BookingListing";
 import { Outlet } from 'react-router-dom';
-import {UncontrolledCarousel} from 'reactstrap';
+// import {UncontrolledCarousel} from 'reactstrap';
 import {  Navigate } from "react-router-dom";
 import { isLoggedIn } from "./components/LoginForm/LoginForm"; 
 

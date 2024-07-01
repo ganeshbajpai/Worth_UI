@@ -5,7 +5,7 @@ import customer_url from "./api/customerapi";
 const CustomerEdit=()=>{
     const{custId}=useParams();
 
-    const[custdata,custdatachange]=useState({})
+    // const[custdata,custdatachange]=useState({})
 
     useEffect(()=>{
         fetch(`${customer_url}/customer/customerDetails/`+ custId).then((resp) => {
@@ -50,7 +50,7 @@ const[contact_Person,contact_Personchange]=useState("");
 const[contact_Number,contact_Numberchange]=useState("");
 const[emailId,emailIdchange]=useState("");
 const[gstNo,gstNochange]=useState("");
-const[active,activechange]=useState(true);
+const[active]=useState(true);
 const[validation,valchange]=useState(false);
 
 const navigate=useNavigate();
@@ -105,41 +105,41 @@ navigate("/main/customer");
                     <div className="form-group">
                       <label>Company Name</label>
                       <input required disabled="disabled" value={company_Name} onMouseDown={e=>valchange(true)}onChange={e=>company_Namechange(e.target.value)} className="form-control"></input>
-                      {company_Name.length==0 && validation && <span className='text-danger'>Enter Company Name</span>}
+                      {company_Name.length===0 && validation && <span className='text-danger'>Enter Company Name</span>}
                       </div>                    
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Comapny Address</label>
                       <input required value={company_Address} onChange={e=>company_Addresschange(e.target.value)} className="form-control"></input>
-                      {company_Address.length==0 && validation && <span className='text-danger'>Enter Company Address</span>}
+                      {company_Address.length===0 && validation && <span className='text-danger'>Enter Company Address</span>}
                       </div>                    
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>City</label>
                       <input required value={city} onChange={e=>citychange(e.target.value)} className="form-control"></input>
-                      {city.length==0 && validation && <span className='text-danger'>Enter City</span>}
+                      {city.length===0 && validation && <span className='text-danger'>Enter City</span>}
                       </div>                    
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>State</label>
                       <input required value={state} onChange={e=>statechange(e.target.value)} className="form-control"></input>
-                      {state.length==0 && validation && <span className='text-danger'>Enter State</span>}
+                      {state.length===0 && validation && <span className='text-danger'>Enter State</span>}
                       </div>                    
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Country</label>
                       <input required value={country} onChange={e=>countrychange(e.target.value)} className="form-control"></input>
-                      {country.length==0 && validation && <span className='text-danger'>Enter Country</span>}
+                      {country.length===0 && validation && <span className='text-danger'>Enter Country</span>}
                       </div>                    
                   </div> <div className="col-lg-12">
                     <div className="form-group">
                       <label>Pincode</label>
                       <input required type='Number' value={pincode} onChange={e=>pincodechange(e.target.value)} className="form-control"></input>
-                      {pincode.length==0 && validation && <span className='text-danger'>Enter Pincode</span>}
+                      {pincode.length===0 && validation && <span className='text-danger'>Enter Pincode</span>}
                       </div>                    
                   </div>
                   <div className="col-lg-12">
@@ -147,13 +147,13 @@ navigate("/main/customer");
                       <label>Contact Person</label>
                       <input required value={contact_Person} onChange={e=>contact_Personchange(e.target.value)} className="form-control"></input>
                       
-                      {contact_Person.length==0 && validation && <span className='text-danger'>Enter Contact Person</span>}</div>                    
+                      {contact_Person.length===0 && validation && <span className='text-danger'>Enter Contact Person</span>}</div>                    
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Contact Number</label>
                       <input required type='number' value={contact_Number} onChange={e=>contact_Numberchange(e.target.value)} className="form-control"></input>
-                      {contact_Number.length==0 && validation && <span className='text-danger'>Enter Contact Number</span>}
+                      {contact_Number.length===0 && validation && <span className='text-danger'>Enter Contact Number</span>}
                       </div>                    
                   </div>
                   <div className="col-lg-12">
