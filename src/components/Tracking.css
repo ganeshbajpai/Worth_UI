@@ -1,0 +1,72 @@
+.card-container {
+  margin-top: 20px;
+  align-items: center;
+  position: inherit;
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  padding: 20px;
+}
+
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center-align the form horizontally */
+  position: inherit;
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  backdrop-filter: blur(10px); /* Apply a blur effect */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.input-field {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc; /* Add a border */
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #007bff; /* Change border color when focused */
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+}
+
+.card-body {
+  margin-top: 20px;
+  text-align: center; /* Center-align headers */
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.card {
+  text-align: center; /* Center-align content inside the card */
+}
+
+.print-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff; /* Change button color */
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.print-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.card-body table thead th {
+  text-align: center;
+}

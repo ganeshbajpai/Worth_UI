@@ -1,0 +1,86 @@
+/* Sidebar */
+#sidebar {
+  grid-area: sidebar;
+  width: 200px;
+  height: 100%;
+  background-color: rgba(38, 48, 67, 0.7); /* Transparent background color */
+  overflow-y: auto;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100; /* Ensure the sidebar stays above other content */
+  backdrop-filter: blur(10px); /* Apply blur effect */
+}
+
+.sidebar-title {
+  display: none;
+}
+
+.sidebar-brand {
+  margin-top: 15px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff; /* Set brand text color */
+}
+
+.sidebar-list {
+  padding: 0;
+  list-style-type: none;
+  display: flex; /* Change display to flex */
+  flex-direction: column; /* Arrange list items vertically */
+  justify-content: center; /* Center-align list items vertically */
+}
+
+.sidebar-list-item {
+  padding: 20px 20px 20px 20px;
+  font-size: 18px;
+}
+
+.sidebar-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+.sidebar-list-item > a {
+  text-decoration: none;
+  color: #9e9ea4;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #fff;
+}
+
+.toggle-btn i {
+  transition: 0.5s;
+}
+
+.sidebar.open {
+  width: 0;
+}
+
+.sidebar-list-item > button{
+  padding: 20px 20px 20px 20px;
+  font-size: 18px;
+  border: none;
+  background: none;
+  color: #9e9ea4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar-list-item > button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+/* End Sidebar */

@@ -1,0 +1,111 @@
+.tracking-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+    backdrop-filter: blur(25px); /* Apply a blur effect */
+  }
+  
+  .tracking-card {
+    width: 100%;
+    max-width: 1000px; /* Adjust the maximum width as needed */
+    background-color: rgba(50, 15, 164, 0.5); /* Semi-transparent white background */
+    border-radius: 10px;
+    padding: 30px; /* Increase the padding for more space */
+    box-shadow: 0 0 10px rgba(127, 159, 230, 0.1); /* Add a subtle shadow */
+    backdrop-filter: blur(25px); /* Apply a blur effect */
+  }
+  
+  .tracking-card h2 {
+    margin-bottom: 20px;
+    color: #343a40; /* Dark gray text color */
+  }
+  
+  .tracking-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    padding: 5px; 
+  }
+
+  .tracking-form input[type="number"] {
+    flex: 1;
+    margin-right: 10px;
+    padding: 15px; /* Increase padding to increase size */
+    border: 1px solid #ced4da; /* Gray border */
+    border-radius: 5px;
+  }
+  
+  .tracking-form input[type="number"] {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #ced4da; /* Gray border */
+    border-radius: 5px;
+  }
+  
+  .tracking-form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  
+  .tracking-results {
+    background-color: rgba(87, 234, 188, 0.5); /* Semi-transparent white background */
+    backdrop-filter: blur(15px); /* Apply a blur effect */
+    padding: 20px; /* Add padding for spacing */
+    border-radius: 10px; /* Add border-radius for rounded corners */
+    margin-top: 20px; /* Adjust margin as needed */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    text-align: center;
+  }
+  .tracking-results th.lr-number {
+    text-align: center;
+  }
+  
+  .tracking-results h3 {
+    margin-bottom: 20px;
+    color: #343a40; /* Dark gray text color */
+    text-align: center;
+ 
+  }
+  
+  .tracking-results Table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tracking-results th,
+  .tracking-results td {
+    padding: 10px;
+    border: 1px solid #dee2e6; /* Light gray border */
+  }
+  
+  .tracking-results th {
+    background-color: #f8f9fa; /* Light gray background for header */
+  }
+  
+  .tracking-results tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Alternate row background color */
+  }
+  .searchInputs {
+    position: relative;
+  }
+  
+  .searchIcon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px; /* Adjust as needed */
+    color: #aaa; /* Adjust color as needed */
+  }
+  
+  .searchInputs input[type="number"] {
+    padding-left: 30px; /* Adjust to make space for the icon */
+  }
+  
+  
