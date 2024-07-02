@@ -34,8 +34,6 @@
     "build:ci": "CI=false npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-    
-    
   },
   "eslintConfig": {
     "extends": [
@@ -58,5 +56,4 @@
   "devDependencies": {
     "tailwindcss": "^3.4.1"
   }
-  
 }
