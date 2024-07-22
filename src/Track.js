@@ -1,107 +1,99 @@
-import {  useRef, useState } from "react";
-import { Button, Card, Table } from "reactstrap";
-// import { useReactToPrint } from "react-to-print";
-import { toast } from "react-toastify";
-import axios from "axios";
-import './Track.css'
-import { FaSearch } from "react-icons/fa";
+import React, { useState } from "react";
+import { Button, Input, Table, Spinner, Alert } from "reactstrap";
 import booking_url from "./api/bookingApi";
+import "./Track.css"; // Import the custom CSS
 
-function Track() {
-  const [getuserdata, setGetuserdata] = useState([]);
+const Track = () => {
   const [query, setQuery] = useState("");
-  const printRef = useRef();
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // const handlePrint = useReactToPrint({
-  //   content: () => printRef.current,
-  // });
-
-  const handleSubmit = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    setGetuserdata([]);
+    setIsLoading(true);
+    setError("");
 
     try {
-      const response = await axios.get(
-        `${booking_url}/Logging/booking/${query}`
-      );
-      setGetuserdata(response.data); // Assuming API returns an object containing data
-      toast.success("Loaded..");
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      toast.error("Something went wrong");
+      const response = await fetch(`${booking_url}/Logging/booking/${query}`);
+      if (!response.ok) {
+        throw new Error("Invalid AWB or Result not found");
+      }
+      const data = await response.json();
+      if (data.length === 0) {
+        throw new Error("Invalid AWB or Result not found");
+      }
+      setResults(data);
+    } catch (err) {
+      setResults([]);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // const reset = () => {
-  //   setQuery("");
-  //   setGetuserdata([]); // Clear the data
-  // };
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
+    if (results.length > 0) {
+      setResults([]);
+    }
+    if (error) {
+      setError("");
+    }
+  };
 
   return (
-    <div className="tracking-container">
-      <Card className="tracking-card">
-        <h2>Track Status</h2>
-        
-        <form onSubmit={handleSubmit} className="tracking-form">
-          <div className="search">
-            <div className="searchInputs">
-              <FaSearch className="searchIcon" />
-              <input
-                type="number"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Enter LR Number..."
-              />
-               <Button className="btn btn-col-green" type="submit" color="primary">Search</Button>
+    <div className="container">
+      <div className="search-box">
+        <h2>Logistics Tracking</h2>
+        <form onSubmit={handleSearch}>
+          <div className="input-group mb-3">
+            <Input
+              type="text"
+              value={query}
+              onChange={handleInputChange}
+              placeholder="Enter Booking ID or Details"
+              className="form-control"
+            />
+            <div className="input-group-append">
+              <Button type="submit" color="primary" disabled={isLoading}>
+                {isLoading ? <Spinner size="sm" /> : "Search"}
+              </Button>
             </div>
-           
           </div>
         </form>
-      </Card>
-    
-      
-      <div ref={printRef} className="tracking-results">
-        <h3>Tracking Results</h3>
-        
-        {getuserdata.length > 0 ? (
-          <Table bordered>
-            
-            <thead>
-              <tr>
-                
-                <th className="lr-number" colSpan="7">LR Number: {getuserdata[0].bookingId}</th>
-               
-              </tr>
-              
-              <tr>
-                <th>Consignor</th>
-                <th>Status</th>
-                <th>Location</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Remarks</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getuserdata.map((data) => (
-                <tr key={data.bookingId}>
-                  <td>{data.consignorName}</td>
-                  <td>{data.trackStatus}</td>
-                  <td>{data.trackLocation}</td>
-                  <td>{data.date}</td>
-                  <td>{data.time}</td>
-                  <td>{data.remarks}</td>
-                </tr>
-              ))}
-                
-            </tbody>
-          </Table>
-        ) : (
-          <p>No results found Or Invalid LR Number</p>
-        )}
+        {error && <Alert color="danger">{error}</Alert>}
       </div>
+      {results.length > 0 && (
+        <Table striped className="results-table">
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Consignor Name</th>
+              <th>Consignee Name</th>
+              <th>Status</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {results.map((result) => (
+              <tr key={result.bookingId}>
+                <td>{result.bookingId}</td>
+                <td>{result.consignorName}</td>
+                <td>{result.consigneeName}</td>
+                <td>{result.trackStatus}</td>
+                <td>{result.trackLocation}</td>
+                <td>{result.date}</td>
+                <td>{result.time}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </div>
   );
-}
+};
 
 export default Track;
