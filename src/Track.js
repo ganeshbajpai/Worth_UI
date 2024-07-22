@@ -97,7 +97,7 @@ function Track() {
             </tbody>
           </Table>
         ) : (
-          <p>No results found</p>
+          <p>No results found Or Invalid LR Number</p>
         )}
       </div>
     </div>

@@ -32,7 +32,7 @@ const BookingDetails = () => {
         console.log(err.message);
         toast.error("something went wrong");
       });
-  }, []);
+  }, [bookId]);
 
   return (
     <div >

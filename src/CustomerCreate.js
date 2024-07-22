@@ -1,58 +1,61 @@
 import React, { useState } from 'react';
-import { Link,  useNavigate } from 'react-router-dom';
-import customer_url from "./api/customerapi";
-import { Button} from "reactstrap";
+import { Link, useNavigate } from 'react-router-dom';
+import customer_url from './api/customerapi';
+import { Button } from 'reactstrap';
+
 const CustomerCreate = () => {
+  const [customerId] = useState('');
+  const [company_Name, setCompanyName] = useState('');
+  const [company_Address, setCompanyAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [contact_Person, setContactPerson] = useState('');
+  const [contact_Number, setContactNumber] = useState('');
+  const [emailId, setEmailId] = useState('');
+  const [gstNo, setGstNo] = useState('');
+  const [active] = useState(true);
+  // const [valChange, setValChange] = useState(false);
 
-const[customerId]=useState("");
-const[company_Name,company_Namechange]=useState("");
-const[company_Address,company_Addresschange]=useState("");
-const[city,citychange]=useState("");
-const[state,statechange]=useState("");
-const[country,countrychange]=useState("");
-const[pincode,pincodechange]=useState("");
-const[contact_Person,contact_Personchange]=useState("");
-const[contact_Number,contact_Numberchange]=useState("");
-const[emailId,emailIdchange]=useState("");
-const[gstNo,gstNochange]=useState("");
-const[active]=useState(true);
-const[valchange]=useState(false);
+  const navigate = useNavigate();
 
-const navigate=useNavigate();
-
-const handlesubmit=(e)=>{
-
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const custdata={company_Name,company_Address,city,state,
-       country,pincode,contact_Person,contact_Number,emailId,gstNo,active};
+    const custdata = {
+      company_Name,
+      company_Address,
+      city,
+      state,
+      country,
+      pincode,
+      contact_Person,
+      contact_Number,
+      emailId,
+      gstNo,
+      active,
+    };
 
-       
-
-     fetch(`${customer_url}/customer/addCustomer`,{
-        method:"POST",
-        headers:{"content-type":"application/json"},
-        body:JSON.stringify(custdata)
-
-
-
-     }).then((res)=>{
-alert("Saved Successfully..")
-navigate("/main/customer");
-
-     }).catch((err)=>{
-        console.log(err.message)
-     })
-}
-
+    fetch(`${customer_url}/customer/addCustomer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(custdata),
+    })
+      .then((res) => {
+        alert('Saved Successfully..');
+        navigate('/main/customer');
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
   return (
     <div>
       <div className="row">
         <div className="offset-lg-1 col-lg-9">
-          <form className="container" onSubmit={handlesubmit}>
-
-
-            <div className="card" style={{"textAlign":"left"}}>
+          <form className="container" onSubmit={handleSubmit}>
+            <div className="card" style={{ textAlign: 'left' }}>
               <div className="card-title">
                 <h2>Add Customer</h2>
               </div>
@@ -60,90 +63,141 @@ navigate("/main/customer");
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="form-group">
-                      <label>ID</label>
-                      <input value={customerId} disabled="disabled" className="form-control"></input>
-                      </div>                    
+                      <label>ID(Auto-Generate)</label>
+                      <input
+                        value={customerId}
+                        disabled="disabled"
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Company Name</label>
-                      <input required value={company_Name} onMouseDown={e=>valchange(true)}onChange={e=>company_Namechange(e.target.value)} className="form-control"></input>
-                     
-                      </div>                    
+                      <input
+                        required
+                        value={company_Name}
+                        // onMouseDown={(e) => setValChange(true)}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
-                      <label>Comapny Address</label>
-                      <input required value={company_Address} onChange={e=>company_Addresschange(e.target.value)} className="form-control"></input>
-                      
-                      </div>                    
+                      <label>Company Address</label>
+                      <input
+                        required
+                        value={company_Address}
+                        onChange={(e) => setCompanyAddress(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>City</label>
-                      <input required value={city} onChange={e=>citychange(e.target.value)} className="form-control"></input>
-                     
-                      </div>                    
+                      <input
+                        required
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>State</label>
-                      <input required value={state} onChange={e=>statechange(e.target.value)} className="form-control"></input>
-                      
-                      </div>                    
+                      <input
+                        required
+                        value={state}
+                        onChange={(e) => setState(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Country</label>
-                      <input required value={country} onChange={e=>countrychange(e.target.value)} className="form-control"></input>
-                      
-                      </div>                    
-                  </div> <div className="col-lg-12">
+                      <input
+                        required
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="col-lg-12">
                     <div className="form-group">
                       <label>Pincode</label>
-                      <input required type='Number' value={pincode} onChange={e=>pincodechange(e.target.value)} className="form-control"></input>
-                      
-                      </div>                    
+                      <input
+                        required
+                        type="number"
+                        value={pincode}
+                        onChange={(e) => setPincode(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Contact Person</label>
-                      <input required value={contact_Person} onChange={e=>contact_Personchange(e.target.value)} className="form-control"></input>
-                      
-                     
+                      <input
+                        required
+                        value={contact_Person}
+                        onChange={(e) => setContactPerson(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Contact Number</label>
-                      <input required type='number' value={contact_Number} onChange={e=>contact_Numberchange(e.target.value)} className="form-control"></input>
-                      
-                      </div>                    
+                      <input
+                        required
+                        type="number"
+                        value={contact_Number}
+                        onChange={(e) => setContactNumber(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Email Id</label>
-                      <input  required type='email' value={emailId} onChange={e=>emailIdchange(e.target.value)} className="form-control"></input>
-                      </div>                    
+                      <input
+                        required
+                        type="email"
+                        value={emailId}
+                        onChange={(e) => setEmailId(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>GST No</label>
-                      <input  required value={gstNo} onChange={e=>gstNochange(e.target.value)} className="form-control"></input>
-                      </div>                    
-                  </div> 
-                                       
-                 
+                      <input
+                        required
+                        value={gstNo}
+                        onChange={(e) => setGstNo(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
+                  </div>
+
                   <div className="col-lg-12">
                     <div className="form-group">
-                      <Button type='submit' color='success'>Save</Button>
-                      <Link to={"/main/customer"} className='btn btn-danger'>Back</Link>
-                      </div>                    
+                      <Button type="submit" color="success">
+                        Save
+                      </Button>
+                      <Link to={'/main/customer'} className="btn btn-danger">
+                        Back
+                      </Link>
+                    </div>
                   </div>
-                  </div>
-                  
+                </div>
               </div>
-              
-            </div>
             </div>
           </form>
         </div>
@@ -151,4 +205,5 @@ navigate("/main/customer");
     </div>
   );
 };
+
 export default CustomerCreate;

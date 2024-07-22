@@ -37,7 +37,7 @@ const CustomerEdit=()=>{
         })
     
     
-    },[]);
+    },[custId]);
 
 const[customerId,customerIdchange]=useState("");
 const[company_Name,company_Namechange]=useState("");

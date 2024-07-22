@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Input } from "reactstrap";
 import './BookingEdit.css';
-import axios from "axios";
 import booking_url from "./api/bookingApi";
 
 const BookingEdit = () => {
   const { bookId } = useParams();
 
-  // const [] = useState({});
   const [isUpdating, setIsUpdating] = useState(false); // State to track updating status
+  
   useEffect(() => {
     fetch(`${booking_url}/Demo/booking/` + bookId)
       .then((resp) => {
@@ -41,7 +40,7 @@ const BookingEdit = () => {
       .catch((err) => {
         console.log(err.message);
       });
-  }, []);
+  }, [bookId]);
 
   const [bookingId, bookingIdchange] = useState("");
   const [consignorName, consignorNamechange] = useState("");
@@ -65,11 +64,8 @@ const BookingEdit = () => {
   const [remarks, remarkschange] = useState("");
   const [trackLocation, trackLocationchange] = useState("");
 
-  // const [active, activechange] = useState(true);
-  // const [validation, valchange] = useState(false);
-
   const navigate = useNavigate();
-const[file ,setFile]=useState('');
+
   const handlesubmit = (e) => {
     e.preventDefault();
     setIsUpdating(true); // Set updating status to true
@@ -120,36 +116,6 @@ const[file ,setFile]=useState('');
         console.log(err.message);
       });
   };
-  // const handleFileChange = (e) => {
-  //   // Update the file state when a file is selected
-  //   setFile(e.target.files[0]);
-  // };
-  // const uploadFile = async () => {
-  //   if (!file) {
-  //       alert("Please select a file.");
-  //       return;
-  //   }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-        // Send a POST request to upload the file
-        const response =  axios.post(`${booking_url}/Demo/upload/${bookId}`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-        });
-
-        // Handle the response from the server
-        console.log("File uploaded successfully:", response.data);
-        alert("Upload Successfully..");
-        // Reset file state after successful upload
-        setFile(null);
-    } catch (error) {
-        console.error("Error uploading file:", error);
-        alert("Failed to upload file.");
-    }
 
   return (
     <div>
@@ -254,26 +220,12 @@ const[file ,setFile]=useState('');
                       ></input>
                     </div>
                   </div>
-                  {/* <div className="form-group">
-              <label>POD (PDF/JPG)</label>
-              <input
-                type="file"
-                onChange={handleFileChange}
-                accept=".pdf,.jpg,.jpeg"
-                className="form-control-file"
-              />
-             
-            </div> */}
-            {/* <Button type="button" color="primary" onClick={uploadFile}>
-            Upload File
-          </Button> */}
-          
                   <div className="col-lg-12">
                     <div className="btn-container">
-                       {/* Disable button and show "Updating..." text when updating */}
-                    <Button type="submit" color="success" disabled={isUpdating}>
-                      {isUpdating ? 'Updating...' : 'Update'}
-                    </Button>
+                      {/* Disable button and show "Updating..." text when updating */}
+                      <Button type="submit" color="success" disabled={isUpdating}>
+                        {isUpdating ? 'Updating...' : 'Update'}
+                      </Button>
                       <Link to={"/main/intransit"} className="btn btn-danger">
                         Back
                       </Link>
@@ -288,4 +240,5 @@ const[file ,setFile]=useState('');
     </div>
   );
 };
+
 export default BookingEdit;
