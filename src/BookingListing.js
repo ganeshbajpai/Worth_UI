@@ -89,7 +89,7 @@ const BookingListing = () => {
         <div className="card-body">
           <div className="divbtn">
             <Link to="/main/booking/create" className="btn btn-success">
-              New Booking (+)
+            New Booking(+)
             </Link>
             <Button color="danger" className="ml-2" onClick={exportToCsv}>Download</Button>
             {/* Add search bar */}
