@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
+import {
+  FaPlus
+ 
+} from "react-icons/fa";
 import customer_url from "./api/customerapi";
 import "./CustomerListing.css";
 
 const CustomerListing = () => {
   const [custdata, setCustdata] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Number of items to display per page
-  const [searchQuery, setSearchQuery] = useState(""); // State variable for search query
+  const [itemsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
+
+  const handleAddCustomer = () => {
+    navigate("/main/customer/create");
+  };
 
   const LoadDetails = (customerId) => {
     navigate("/main/customer/details/" + customerId);
@@ -37,63 +45,67 @@ const CustomerListing = () => {
 
   useEffect(() => {
     fetch(`${customer_url}/customer/customerDetails`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("API response was not OK");
+        }
+        return res.json();
+      })
       .then((resp) => {
-        setCustdata(resp);
+        const data = Array.isArray(resp) ? resp : resp.data || [];
+        setCustdata(data);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.error("Fetch error:", err.message);
+        setCustdata([]);
       });
   }, []);
 
-  // Logic for pagination
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(custdata.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const nextPage = () => setCurrentPage((prevPage) => prevPage + 1);
+  const prevPage = () => setCurrentPage((prevPage) => prevPage - 1);
 
-  const nextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
-  };
-
-  const prevPage = () => {
-    setCurrentPage((prevPage) => prevPage - 1);
-  };
-
-  // Filtering function
-  const filteredData = custdata.filter((item) =>
-    item.company_Name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = Array.isArray(custdata)
+    ? custdata.filter((item) =>
+        item.companyName &&
+        item.companyName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="container">
-      <div className="card-title">
-        <h2>Customer Listing</h2>
-      </div>
+      
+ <h5 className="table-blur-container">Customer Listing</h5>
+ <Button color="success" onClick={handleAddCustomer}>
+          <FaPlus className="me-2" />
+          Add Customer
+        </Button>
       <div className="card-body">
-        <div className="divbtn">
-          <Link to="/main/customer/create" className="btn btn-success">
-            Add New (+)
-          </Link>
-        </div>
-        {/* Search bar */}
+        <div className="d-flex justify-content-between align-items-center mt-3 mb-2">
+       
+        
+      </div>
         <input
           type="text"
           placeholder="Search by Company Name"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="form-control search-input"
+          className="form-control search-input mb-3"
         />
+
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th>Customer Id</th>
+              <th>Code</th>
               <th>Company Name</th>
               <th>Company Address</th>
               <th>City</th>
-              <th>Contact Number</th>
+              <th>Contact</th>
               <th>Update</th>
               <th>Delete</th>
               <th>Details</th>
@@ -105,17 +117,17 @@ const CustomerListing = () => {
               .map((item) => (
                 <tr key={item.customerId}>
                   <th>{item.customerId}</th>
-                  <td>{item.company_Name}</td>
-                  <td>{item.company_Address}</td>
+                  <td>{item.companyName}</td>
+                  <td>{item.companyAddress}</td>
                   <td>{item.city}</td>
-                  <td>{item.contact_Number}</td>
+                  <td>{item.contactNumber}</td>
                   <td>
                     <Button
                       onClick={() => LoadEdit(item.customerId)}
                       size="sm"
                       color="warning"
                     >
-                      Update
+                       Update
                     </Button>
                   </td>
                   <td>
@@ -124,7 +136,7 @@ const CustomerListing = () => {
                       size="sm"
                       color="secondary"
                     >
-                      Delete
+                       Delete
                     </Button>
                   </td>
                   <td>
@@ -133,13 +145,14 @@ const CustomerListing = () => {
                       size="sm"
                       color="primary"
                     >
-                      Details
+                       Details
                     </Button>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
+
         <ul className="pagination">
           <li className="page-item">
             <Button

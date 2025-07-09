@@ -1,0 +1,30 @@
+.compact-form .form-control-sm {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  height: calc(1.5em + 0.5rem + 2px);
+}
+
+.compact-form label {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.compact-form .card {
+  border: none;
+}
+
+.compact-form .btn {
+  font-size: 0.875rem;
+}
+
+.compact-form .text-danger {
+  font-size: 0.75rem;
+}
+
+.compact-form .card-header {
+  padding: 0.5rem 1rem;
+}
+
+.compact-form .card-body {
+  padding: 1rem;
+}

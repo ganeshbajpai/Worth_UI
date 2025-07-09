@@ -44,3 +44,20 @@
   width: 65%;
   display: inline-block;
 }
+.compact-form .form-control-sm {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.compact-form label {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.compact-form .card {
+  border: none;
+}
+
+.compact-form .btn {
+  font-size: 0.875rem;
+}

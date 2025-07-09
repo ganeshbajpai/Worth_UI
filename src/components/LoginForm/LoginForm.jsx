@@ -80,7 +80,7 @@ const LoginForm = () => {
           {/* <a href='#'>Forgot password?</a> */}
         </div>
         <button type='submit' disabled={isLoading}>
-          {isLoading ? 'Verifying...' : 'Login'}
+          {isLoading ? 'Please wait...' : 'Login'}
         </button>
         <button type='button' onClick={handleReset}>Reset</button>
         <div className="register-link">

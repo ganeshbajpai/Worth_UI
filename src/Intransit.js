@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table } from "reactstrap";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import './BookingListing.css';
 import booking_url from "./api/bookingApi";
 
 const Intransit = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(5); // Number of items per page
+  const [postsPerPage] = useState(5);
   const [bookdata, setBookdata] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -20,13 +20,19 @@ const Intransit = () => {
     navigate("/main/booking/edit/" + bookingId);
   };
 
-  // const Removefunction = (bookingId) => {
-  //   // Remove function logic
-  // };
-
   const exportToCsv = () => {
+    if (!Array.isArray(bookdata) || bookdata.length === 0) {
+      toast.error("No data available to export");
+      return;
+    }
+
     const header = Object.keys(bookdata[0]).join(",") + "\n";
-    const csv = header + bookdata.map((item) => Object.values(item).join(",")).join("\n");
+    const csv = header + bookdata.map((item) =>
+      Object.values(item)
+        .map(value => `"${String(value).replace(/"/g, '""')}"`)
+        .join(",")
+    ).join("\n");
+
     const csvBlob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(csvBlob);
     const link = document.createElement("a");
@@ -37,42 +43,44 @@ const Intransit = () => {
     document.body.removeChild(link);
   };
 
-
   useEffect(() => {
-    fetch(`${booking_url}/Demo/bookings/intransit`)
-      .then((res) => res.json())
+    fetch(`${booking_url}/booking/bookings/intransit`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch intransit bookings");
+        }
+        return res.json();
+      })
       .then((resp) => {
-        setBookdata(resp);
-        toast.success("Booking has been loaded");
+        const data = Array.isArray(resp) ? resp : resp.data || [];
+        setBookdata(data);
+        // toast.success("Intransit bookings loaded");
       })
       .catch((err) => {
-        console.log(err.message);
-        toast.error("Something went wrong");
+        console.error(err.message);
+        setBookdata([]); // fallback to empty array
+        toast.error("Failed to load bookings. Please check the API.");
       });
   }, []);
 
-  // Filter data based on search query
-  const filteredData = bookdata.filter(item =>
-    item.bookingId.toString().toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredData = Array.isArray(bookdata)
+    ? bookdata.filter(item =>
+        item.bookingId.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
-  // Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = filteredData.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Change page
-  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   return (
     <div>
       <div className="card-title">
-        <h2>Intransit Consignments</h2>
+        <h2 className="table-blur-container">Intransit Consignments</h2>
       </div>
       <div className="card-body">
         <div className="divbtn">
           <Button color="danger" className="ml-2" onClick={exportToCsv}>Download</Button>
-          {/* Add search bar */}
           <input
             type="text"
             placeholder="Search LR Number..."
@@ -94,37 +102,39 @@ const Intransit = () => {
             </tr>
           </thead>
           <tbody>
-            {currentPosts.map((item) => (
-              <tr key={item.bookingId}>
-                <th>{item.bookingId}</th>
-                <td>{item.bookingDate}</td>
-                <td>{item.consignorName}</td>
-                <td>{item.consigneeName}</td>
-                <td>{item.trackStatus}</td>
-                <td>
-                  <Button
-                    onClick={() => {
-                      LoadEdit(item.bookingId);
-                    }}
-                    size="sm"
-                    color="warning"
-                  >
-                    Update
-                  </Button>
-                </td>
-                <td>
-                  <Button
-                    onClick={() => {
-                      LoadDetails(item.bookingId);
-                    }}
-                    size="sm"
-                    color="primary"
-                  >
-                    Details
-                  </Button>
-                </td>
+            {currentPosts.length > 0 ? (
+              currentPosts.map((item) => (
+                <tr key={item.bookingId}>
+                  <td>{item.bookingId}</td>
+                  <td>{item.bookingDate}</td>
+                  <td>{item.consignorName}</td>
+                  <td>{item.consigneeName}</td>
+                  <td>{item.trackStatus}</td>
+                  <td>
+                    <Button
+                      onClick={() => LoadEdit(item.bookingId)}
+                      size="sm"
+                      color="warning"
+                    >
+                      Update
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      onClick={() => LoadDetails(item.bookingId)}
+                      size="sm"
+                      color="primary"
+                    >
+                      Details
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="text-center">No data available</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </Table>
         {/* Pagination */}
@@ -152,7 +162,11 @@ const Intransit = () => {
           )}
           <li className="page-item">
             <button
-              onClick={() => setCurrentPage(currentPage === Math.ceil(filteredData.length / postsPerPage) ? currentPage : currentPage + 1)}
+              onClick={() =>
+                setCurrentPage(currentPage === Math.ceil(filteredData.length / postsPerPage)
+                  ? currentPage
+                  : currentPage + 1)
+              }
               disabled={currentPage === Math.ceil(filteredData.length / postsPerPage)}
               className="page-link"
             >

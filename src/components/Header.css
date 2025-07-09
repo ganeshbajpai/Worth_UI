@@ -1,41 +1,54 @@
+/* Glassmorphic Header Style */
 .header {
+  background: rgba(38, 48, 67, 0.35); /* Soft transparent dark */
+  backdrop-filter: blur(14px); /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(14px); /* Safari support */
+  color: #ffffff;
+  padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #333; /* Header background color */
-  color: #fff; /* Text color */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow for elevation */
+  z-index: 1050;
+  min-width: 250px;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+/* Logo image */
+.header .logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
 
-.nav {
-  display: flex;
+/* Company name */
+.header h1 {
+  font-size: 1.2rem;
+  margin-left: 10px;
+  color: #ffffff;
 }
 
-.nav-list {
-  list-style-type: none;
+/* Username greeting */
+.header h2 {
+  font-size: 1rem;
   margin: 0;
-  padding: 0;
-  display: flex;
+  color: #ffffff;
 }
 
-.nav-item {
-  margin-right: 20px;
+/* Time and logout button section */
+.header .small {
+  font-size: 0.85rem;
+  color: #e0e0e0;
 }
 
-.nav-item:last-child {
-  margin-right: 0;
+/* Logout button and toggle button */
+.header .btn-outline-light {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+  transition: background-color 0.3s ease;
 }
 
-.nav-item a {
-  color: #fff; /* Link color */
-  text-decoration: none;
-}
-
-.nav-item a:hover {
-  text-decoration: underline;
+.header .btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }

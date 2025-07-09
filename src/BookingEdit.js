@@ -1,232 +1,200 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, Input } from "reactstrap";
+import { Button, Input, FormGroup, Label, Form } from "reactstrap";
 import './BookingEdit.css';
 import booking_url from "./api/bookingApi";
+// import PodUploadForm from "./PodUploadForm";
 
 const BookingEdit = () => {
   const { bookId } = useParams();
-
-  const [isUpdating, setIsUpdating] = useState(false); // State to track updating status
+  const [isUpdating, setIsUpdating] = useState(false);
   
+  // State management
+  const [formData, setFormData] = useState({
+    bookingId: "",
+    consignorName: "",
+    consignorAddress: "",
+    consigneeName: "",
+    consigneeAddress: "",
+    numberOfPackage: "",
+    bookingDate: "",
+    actualWeight: "",
+    chargedWeight: "",
+    shippingMode: "",
+    paymentMode: "",
+    frieghtCharges: "",
+    invoiceNumber: "",
+    invoiceDate: "",
+    invoiceValue: "",
+    insurance: "",
+    trackStatus: "",
+    date: "",
+    time: "",
+    remarks: "",
+    trackLocation: ""
+  });
+
   useEffect(() => {
-    fetch(`${booking_url}/Demo/booking/` + bookId)
-      .then((resp) => {
-        return resp.json();
-      })
-      .then((resp) => {
-        bookingIdchange(resp.bookingId);
-        consignorNamechange(resp.consignorName);
-        consignorAddresschange(resp.consignorAddress);
-        consigneeNamechange(resp.consigneeName);
-        consigneeAddresschange(resp.consigneeAddress);
-        numberOfPackagechange(resp.numberOfPackage);
-        bookingDatechange(resp.bookingDate);
-        actualWeightchange(resp.actualWeight);
-        chargedWeightchange(resp.chargedWeight);
-        shippingModechange(resp.shippingMode);
-        paymentModechange(resp.paymentMode);
-        frieghtChargeschange(resp.frieghtCharges);
-        invoiceNumberchange(resp.invoiceNumber);
-        invoiceDatechange(resp.invoiceDate);
-        invoiceValuechange(resp.invoiceValue);
-        trackStatuschange(resp.trackStatus);
-        insurancechange(resp.insurance);
-        datechange(resp.date);
-        timechange(resp.time);
-        remarkschange(resp.remarks);
-        trackLocationchange(resp.trackLocation);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    fetch(`${booking_url}/booking/booking/` + bookId)
+      .then(resp => resp.json())
+      .then(resp => setFormData(resp))
+      .catch(err => console.log(err.message));
   }, [bookId]);
 
-  const [bookingId, bookingIdchange] = useState("");
-  const [consignorName, consignorNamechange] = useState("");
-  const [consignorAddress, consignorAddresschange] = useState("");
-  const [consigneeName, consigneeNamechange] = useState("");
-  const [consigneeAddress, consigneeAddresschange] = useState("");
-  const [numberOfPackage, numberOfPackagechange] = useState("");
-  const [bookingDate, bookingDatechange] = useState("");
-  const [actualWeight, actualWeightchange] = useState("");
-  const [chargedWeight, chargedWeightchange] = useState("");
-  const [shippingMode, shippingModechange] = useState("");
-  const [paymentMode, paymentModechange] = useState("");
-  const [frieghtCharges, frieghtChargeschange] = useState("");
-  const [invoiceNumber, invoiceNumberchange] = useState("");
-  const [invoiceDate, invoiceDatechange] = useState("");
-  const [invoiceValue, invoiceValuechange] = useState("");
-  const [insurance, insurancechange] = useState("");
-  const [trackStatus, trackStatuschange] = useState("");
-  const [date, datechange] = useState("");
-  const [time, timechange] = useState("");
-  const [remarks, remarkschange] = useState("");
-  const [trackLocation, trackLocationchange] = useState("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const navigate = useNavigate();
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    setIsUpdating(true); // Set updating status to true
-    const bookdata = {
-      bookingId,
-      consigneeName,
-      consigneeAddress,
-      consignorName,
-      consignorAddress,
-      numberOfPackage,
-      bookingDate,
-      actualWeight,
-      chargedWeight,
-      shippingMode,
-      paymentMode,
-      frieghtCharges,
-      invoiceNumber,
-      invoiceDate,
-      invoiceValue,
-      trackStatus,
-      date,
-      time,
-      remarks,
-      insurance,
-      trackLocation,
-    };
-
-    fetch(`${booking_url}/Logging/addLogs`, {
+    setIsUpdating(true);
+    
+    fetch(`${booking_url}/logging/addLogs`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(bookdata),
-    })
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err.message);
-      });
+      body: JSON.stringify(formData),
+    }).catch(err => console.log(err.message));
 
-    fetch(`${booking_url}/Demo/UpdateBooking/` + bookId, {
+    fetch(`${booking_url}/booking/UpdateBooking/` + bookId, {
       method: "PUT",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(bookdata),
+      body: JSON.stringify(formData),
     })
-      .then((res) => {
-        alert("Update Successfully..");
+      .then(() => {
+        alert("Updated successfully");
         navigate("/main/intransit");
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      .catch(err => console.log(err.message));
   };
 
   return (
-    <div>
-      <div className="row">
-        <div className="offset-lg-1 col-lg-9">
-          <form className="container" onSubmit={handlesubmit}>
-            <div className="card" style={{ textAlign: "left" }}>
-              <div className="card-title">
-                <h2>Update Status</h2>
+    <div className="container-fluid py-3">
+      <div className="row justify-content-center">
+        <div className="col-md-10 col-lg-8">
+          <Form onSubmit={handlesubmit} className="compact-form">
+            <div className="card shadow-sm">
+              <div className="card-header bg-primary text-white p-2">
+                <h6 className="mb-0">Update Status</h6>
               </div>
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>LR-Number</label>
-                      <input
-                        required
-                        value={bookingId}
-                        disabled="disabled"
-                        className="form-control"
-                      ></input>
-                    </div>
-                  </div>
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Charged Weight</label>
-                      <input
-                        required
-                        type="number"
-                        value={chargedWeight}
-                        onChange={(e) => chargedWeightchange(e.target.value)}
-                        className="form-control"
-                      ></input>
-                    </div>
-                  </div>
+              
+              <div className="card-body p-3">
+                <div className="row g-2">
+                  {/* Column 1 */}
+                  <div className="col-md-6">
+                    <FormGroup className="mb-2">
+                      <Label className="small fw-bold">LR Number</Label>
+                      <Input 
+                        name="bookingId"
+                        value={formData.bookingId}
+                        disabled
+                        className="form-control form-control-sm"
+                      />
+                    </FormGroup>
 
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Status</label>
-
+                    <FormGroup className="mb-2">
+                      <Label className="small fw-bold">Charged Weight</Label>
                       <Input
-                        required
-                        value={trackStatus}
-                        onChange={(e) => trackStatuschange(e.target.value)}
-                        className="form-control"
-                        name="select"
+                        type="number"
+                        name="chargedWeight"
+                        value={formData.chargedWeight}
+                        onChange={handleChange}
+                        className="form-control form-control-sm"
+                      />
+                    </FormGroup>
+
+                    <FormGroup className="mb-2">
+                      <Label className="small fw-bold">Status</Label>
+                      <Input
+                        name="trackStatus"
+                        value={formData.trackStatus}
+                        onChange={handleChange}
                         type="select"
+                        className="form-control form-control-sm"
                       >
                         <option>---Select---</option>
                         <option>Booking Confirmed</option>
                         <option>Confirm Pickup</option>
                         <option>Intransit</option>
-                        <option>Reached Destination Warehouse</option>
+                        <option>Reached Warehouse</option>
                         <option>Out For delivery</option>
                         <option>Delivered</option>
                         <option>Booking Cancelled</option>
                         <option>POD Uploaded</option>
                       </Input>
-                    </div>
+                    </FormGroup>
                   </div>
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Track Status Date</label>
-                      <input
-                        type="Date"
-                        value={date}
-                        onChange={(e) => datechange(e.target.value)}
-                        className="form-control"
-                      ></input>
-                    </div>
-                  </div>
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Track Status Time</label>
-                      <input
+
+                  {/* Column 2 */}
+                  <div className="col-md-6">
+                    <FormGroup className="mb-2">
+                      <Label className="small fw-bold">Status Date</Label>
+                      <Input
+                        type="date"
+                        name="date"
+                        value={formData.date}
+                        onChange={handleChange}
+                        className="form-control form-control-sm"
+                      />
+                    </FormGroup>
+
+                    <FormGroup className="mb-2">
+                      <Label className="small fw-bold">Status Time</Label>
+                      <Input
                         type="time"
-                        value={time}
-                        onChange={(e) => timechange(e.target.value)}
-                        className="form-control"
-                      ></input>
-                    </div>
-                  </div>
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Track Location</label>
-                      <input
+                        name="time"
+                        value={formData.time}
+                        onChange={handleChange}
+                        className="form-control form-control-sm"
+                      />
+                    </FormGroup>
+
+                    <FormGroup className="mb-2">
+                      <Label className="small fw-bold">Location</Label>
+                      <Input
                         type="text"
-                        value={trackLocation}
-                        onChange={(e) => trackLocationchange(e.target.value)}
-                        className="form-control"
-                      ></input>
-                    </div>
+                        name="trackLocation"
+                        value={formData.trackLocation}
+                        onChange={handleChange}
+                        className="form-control form-control-sm"
+                      />
+                    </FormGroup>
                   </div>
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Remarks</label>
-                      <input
+
+                  {/* Full width row */}
+                  <div className="col-12">
+                    <FormGroup className="mb-2">
+                      <Label className="small fw-bold">Remarks</Label>
+                      <Input
                         type="text"
-                        value={remarks}
-                        onChange={(e) => remarkschange(e.target.value)}
-                        className="form-control"
-                      ></input>
-                    </div>
+                        name="remarks"
+                        value={formData.remarks}
+                        onChange={handleChange}
+                        className="form-control form-control-sm"
+                      />
+                    </FormGroup>
+                    
+                    {/* <PodUploadForm bookingId={bookId} className="mb-2" /> */}
                   </div>
-                  <div className="col-lg-12">
-                    <div className="btn-container">
-                      {/* Disable button and show "Updating..." text when updating */}
-                      <Button type="submit" color="success" disabled={isUpdating}>
+
+                  {/* Action buttons */}
+                  <div className="col-12 mt-2">
+                    <div className="d-flex gap-2">
+                      <Button 
+                        type="submit" 
+                        color="primary" 
+                        size="sm"
+                        disabled={isUpdating}
+                        className="px-3"
+                      >
                         {isUpdating ? 'Updating...' : 'Update'}
                       </Button>
-                      <Link to={"/main/intransit"} className="btn btn-danger">
+                      <Link 
+                        to="/main/intransit" 
+                        className="btn btn-sm btn-outline-secondary px-3"
+                      >
                         Back
                       </Link>
                     </div>
@@ -234,7 +202,7 @@ const BookingEdit = () => {
                 </div>
               </div>
             </div>
-          </form>
+          </Form>
         </div>
       </div>
     </div>

@@ -1,80 +1,106 @@
-/* Global styles */
+/* BookingDetails.css */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
 }
 
-/* Main container */
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+
+.print-blur-container:hover {
+  filter: none;
+  opacity: 10;
+  
 }
 
-/* Header section */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+.lr-copy {
+  background: white;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  font-family: 'Poppins', sans-serif;
+  break-inside: avoid;
 }
 
-/* Print button */
-.print-button,
-.back-button {
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-  color: #fff;
+.lr-copy h5 {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
 }
 
-.print-button {
-  background-color: #007bff;
-  margin-right: 10px;
+.lr-copy small {
+  font-size: 0.72rem;
+  color: #444;
 }
 
-.back-button {
-  background-color: #ffc107;
+.lr-copy strong {
+  font-weight: 500;
+  color: #222;
 }
 
-/* Card styles */
-.card {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
+.lr-copy .row > div {
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  break-inside: avoid;
+  font-size: 0.8rem; /* Slightly smaller font for compactness */
+  padding: 0.5rem;
 }
 
-/* Table styles */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
+.no-print {
+  display: none !important;
 }
 
-.table th,
-.table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.print-area {
+  display: none;
 }
 
-.table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .print-area, .print-area * {
+    visibility: visible;
+  }
+  
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: block !important;
+  }
+  
+  .lr-copy {
+    page-break-after: always;
+    box-shadow: none;
+    margin: 0;
+    padding: 5mm;
+    width: 277mm; /* A4 landscape width minus margins */
+    height: 190mm; /* A4 landscape height minus margins */
+  }
+  
+  .lr-copy:last-child {
+    page-break-after: auto;
+  }
+  
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
 
-/* Logo styles */
-.logo {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
-}
+  /* Compact table styles for print */
+  .lr-copy .row > div {
+    margin-bottom: 2px;
+    padding: 2px;
+    font-size: 0.7rem;
+    min-height: auto;
+  }
 
-/* Additional styles */
-.mb-4 {
-  margin-bottom: 20px;
+  /* Ensure QR code prints properly */
+  canvas {
+    max-width: 60px !important;
+    height: auto !important;
+  }
 }

@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
+
 import { Button, Table } from "reactstrap";
 import { toast } from "react-toastify";
+import axios from "axios";
 import './BookingListing.css';
-// import axios from "axios";
 import booking_url from "./api/bookingApi";
 
 const Delivered = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(5); // Number of items per page
+  const [postsPerPage] = useState(5);
   const [bookdata, setBookdata] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
+  
 
-  const LoadDetails = (bookingId) => {
-    navigate("/main/booking/details/" + bookingId);
-  };
+  // const LoadDetails = (bookingId) => {
+  //   navigate("/main/booking/details/" + bookingId);
+  // };
 
   const exportToCsv = () => {
+    if (!Array.isArray(bookdata) || bookdata.length === 0) {
+      toast.error("No data available to export");
+      return;
+    }
+
     const header = Object.keys(bookdata[0]).join(",") + "\n";
-    const csv = header + bookdata.map((item) => Object.values(item).join(",")).join("\n");
+    const csv = header + bookdata.map((item) =>
+      Object.values(item)
+        .map(value => `"${String(value).replace(/"/g, '""')}"`)
+        .join(",")
+    ).join("\n");
+
     const csvBlob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(csvBlob);
     const link = document.createElement("a");
@@ -30,68 +40,94 @@ const Delivered = () => {
     document.body.removeChild(link);
   };
 
-  // const downloadPOD = async (bookingId) => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:8086/Demo/download/${bookingId}`, {
-  //       responseType: 'blob', // Important: set the response type to blob
-  //     });
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     const link = document.createElement('a');
-  //     link.href = url;
-  //     link.setAttribute('download', `POD_${bookingId}.pdf`);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     // Cleanup
-  //     window.URL.revokeObjectURL(url);
-  //     document.body.removeChild(link);
-  //   } catch (error) {
-  //     console.error("Error downloading POD:", error);
-  //     alert("Failed to download POD.");
-  //   }
-  // };
+  const handleDownloadPOD = async (bookingId) => {
+    const filename = `POD_${bookingId}.pdf`;
+    try {
+      const response = await axios.get(`${booking_url}/api/files/download/${bookingId}`, {
+        responseType: 'blob',
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      toast.error("Failed to download POD");
+      console.error(error);
+    }
+  };
+
+  const handleUploadPOD = async (event, bookingId) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      await axios.post(`${booking_url}/api/files/upload/${bookingId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      toast.success("POD uploaded successfully!");
+      
+    } catch (error) {
+      toast.error("Failed to upload POD");
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    fetch(`${booking_url}/Demo/bookings/delivered`)
-      .then((res) => res.json())
+    fetch(`${booking_url}/booking/bookings/delivered`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch delivered bookings");
+        }
+        return res.json();
+      })
       .then((resp) => {
-        setBookdata(resp);
-        toast.success("Booking has been loaded");
+        const data = Array.isArray(resp) ? resp : resp.data || [];
+        setBookdata(data);
+        // toast.success("Delivered bookings loaded");
       })
       .catch((err) => {
-        console.log(err.message);
-        toast.error("Something went wrong");
+        console.error(err.message);
+        setBookdata([]);
+        toast.error("Failed to load bookings. Please check the API.");
       });
   }, []);
 
-  // Get current posts
-  // const indexOfLastPost = currentPage * postsPerPage;
-  // const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  // const currentPosts = bookdata.slice(indexOfFirstPost, indexOfLastPost);
+  const filteredData = Array.isArray(bookdata)
+    ? bookdata.filter(item =>
+        item.bookingId.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
-  // Change page
-  // const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Filter data based on search query
-  const filteredData = bookdata.filter(item =>
-    item.bookingId.toString().toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filteredData.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <div >
+    <div>
       <div className="card-title">
-        <h2>Delivered Consignments</h2>
+        <h2 className="table-blur-container">Delivered Consignments</h2>
       </div>
       <div className="card-body">
         <div className="divbtn">
-          <Button color="danger" className="ml-2" onClick={exportToCsv}>Download</Button>
-          {/* Add search bar */}
+          <Button color="danger" className="ml-2" onClick={exportToCsv}>
+            Download
+          </Button>
           <input
-              type="text"
-              placeholder="Search LR Number..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="ml-2"
-            />
+            type="text"
+            placeholder="Search LR Number..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="ml-2"
+          />
         </div>
         <Table bordered>
           <thead>
@@ -102,43 +138,65 @@ const Delivered = () => {
               <th>Consignee Name</th>
               <th>Current Status</th>
               <th>Delivery Date/Time</th>
-              <th>Details</th>
-              {/* <th>POD</th> Add column for POD */}
+              {/* <th>Details</th> */}
+              <th>Download POD</th>
+              <th>Upload POD</th>
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((item) => (
-              <tr key={item.bookingId}>
-                <td>{item.bookingId}</td>
-                <td>{item.bookingDate}</td>
-                <td>{item.consignorName}</td>
-                <td>{item.consigneeName}</td>
-                <td>{item.trackStatus}</td>
-                <td>{item.date} / {item.time}</td>
-                
-                <td>
-                  <Button
-                    onClick={() => LoadDetails(item.bookingId)}
-                    size="sm"
-                    color="primary"
-                  >
-                    Details
-                  </Button>
-                </td>
-                {/* <td>
-                  <Button
-                    onClick={() => downloadPOD(item.bookingId)}
-                    size="sm"
-                    color="success"
-                  >
-                    Download
-                  </Button>
-                </td> */}
+            {currentPosts.length > 0 ? (
+              currentPosts.map((item) => (
+                <tr key={item.bookingId}>
+                  <td>{item.bookingId}</td>
+                  <td>{item.bookingDate}</td>
+                  <td>{item.consignorName}</td>
+                  <td>{item.consigneeName}</td>
+                  <td>{item.trackStatus}</td>
+                  <td>{item.date} / {item.time}</td>
+                  {/* <td>
+                    <Button
+                      onClick={() => LoadDetails(item.bookingId)}
+                      size="sm"
+                      color="primary"
+                    >
+                      Details
+                    </Button>
+                  </td> */}
+                 <td>
+  {item.trackStatus?.toLowerCase() === "delivered" ? (
+    <Button
+      size="sm"
+      color="success"
+      onClick={() => handleDownloadPOD(item.bookingId)}
+    >
+      Download
+    </Button>
+  ) : (
+    <span className="pending-text">Pending</span>
+  )}
+</td>
+
+
+                  <td>
+                    <label className="btn btn-sm btn-warning mb-0">
+                      Upload
+                      <input
+                        type="file"
+                        hidden
+                        accept=".pdf"
+                        onChange={(e) => handleUploadPOD(e, item.bookingId)}
+                      />
+                    </label>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="9" className="text-center">No data available</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </Table>
-        {/* Pagination */}
         <ul className="pagination">
           <li className="page-item">
             <button
@@ -163,7 +221,11 @@ const Delivered = () => {
           )}
           <li className="page-item">
             <button
-              onClick={() => setCurrentPage(currentPage === Math.ceil(filteredData.length / postsPerPage) ? currentPage : currentPage + 1)}
+              onClick={() =>
+                setCurrentPage(currentPage === Math.ceil(filteredData.length / postsPerPage)
+                  ? currentPage
+                  : currentPage + 1)
+              }
               disabled={currentPage === Math.ceil(filteredData.length / postsPerPage)}
               className="page-link"
             >
