@@ -6,7 +6,7 @@ import { useReactToPrint } from "react-to-print";
 // import html2pdf from "html2pdf.js";
 import { QRCodeCanvas } from "qrcode.react";
 import './BookingDetails.css';
-import logo from "./components/Assets/icon.png";
+import logo from "./components/Assets/logo.png";
 import booking_url from "./api/bookingApi";
 
 const BookingDetails = () => {
@@ -103,10 +103,10 @@ const BookingDetails = () => {
           <div className="d-flex align-items-center">
             <img src={logo} alt="Logo" style={{ width: 120, height: 120, marginRight: 10 }} />
             <div>
-              <h5 className="mb-0">Reliance Industries Ltd.</h5>
+              <h5 className="mb-0">WorthCart Pvt Ltd.</h5>
               <small>A-280, Sec-83, Noida, UP-201301</small><br />
               <small>Phone: +91 9990370943 | GSTIN: 09ASDFFGHH1Z</small><br />
-              <small>Mail: sales@reliance.co.in</small>
+              <small>Mail: sales@worthcartindia.com</small>
             </div>
           </div>
           <div className="text-end text-sm-start mt-2">
@@ -151,7 +151,7 @@ const BookingDetails = () => {
         </div>
 
         <div className="text-center small border border-dark p-2 mt-2" style={{ minHeight: "60px" }}>
-          ____________________ Signature (Consignor / Consignee / Driver)
+          ____________________ Signature (For WorthCart Pvt Ltd)
         </div>
 
         <div className="mt-2 border-top pt-2 small text-muted" style={{ fontSize: "0.65rem" }}>

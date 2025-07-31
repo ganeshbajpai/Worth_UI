@@ -312,3 +312,18 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+.payment-details-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.payment-left {
+  flex: 1;
+}
+
+.signature {
+  text-align: right;
+  flex: 1;
+}

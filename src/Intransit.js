@@ -11,8 +11,10 @@ const Intransit = () => {
   const [bookdata, setBookdata] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const LoadDetails = (bookingId) => {
+  
     navigate("/main/booking/details/" + bookingId);
   };
 
@@ -44,6 +46,7 @@ const Intransit = () => {
   };
 
   useEffect(() => {
+      setLoading(true);
     fetch(`${booking_url}/booking/bookings/intransit`)
       .then((res) => {
         if (!res.ok) {
@@ -60,7 +63,10 @@ const Intransit = () => {
         console.error(err.message);
         setBookdata([]); // fallback to empty array
         toast.error("Failed to load bookings. Please check the API.");
-      });
+      })
+      .finally(() => {
+      setLoading(false); // <-- Stop loading
+    });
   }, []);
 
   const filteredData = Array.isArray(bookdata)
@@ -88,7 +94,15 @@ const Intransit = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="ml-2"
           />
+          
         </div>
+         <div className="table-container-scroll">
+          {loading ? (
+            <div className="text-center">
+              <div className="spinner"></div>
+              <p>Loading intransit...</p>
+            </div>
+          ) : (
         <Table bordered>
           <thead>
             <tr>
@@ -137,6 +151,9 @@ const Intransit = () => {
             )}
           </tbody>
         </Table>
+        )}
+        </div>
+        
         {/* Pagination */}
         <ul className="pagination">
           <li className="page-item">

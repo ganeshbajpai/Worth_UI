@@ -5,6 +5,10 @@ import './InvoiceGenerator.css';
 import logo from './components/Assets/logo.png';
 import signature from './components/Assets/signature.jpg';
 
+import { QRCodeCanvas } from "qrcode.react";
+
+
+
 
 
 
@@ -72,24 +76,26 @@ const InvoiceGenerator = () => {
   };
 
   // Handle item changes
-  const handleItemChange = (index, e) => {
-    const { name, value } = e.target;
-    const newItems = [...formData.items];
-    newItems[index] = { ...newItems[index], [name]: value };
-    
-    // If amount is being edited directly, don't auto-calculate
-    if (name !== 'amount') {
-      // Calculate amount if weight or docket charges change
-      const weight = parseFloat(newItems[index].weight) || 0;
-      const docketCharges = parseFloat(newItems[index].docketCharges) || 0;
-      newItems[index].amount = weight * 10 + docketCharges; // Assuming ₹10 per kg
-    } else {
-      // If amount is being edited directly, parse it as float
-      newItems[index].amount = parseFloat(value) || 0;
-    }
-    
-    setFormData(prev => ({ ...prev, items: newItems }));
-  };
+ const handleItemChange = (index, e) => {
+  const { name, value } = e.target;
+  const newItems = [...formData.items];
+  
+  // Convert relevant fields to numbers
+  let parsedValue = value;
+  if (['weight', 'quantity', 'docketCharges', 'amount'].includes(name)) {
+    parsedValue = parseFloat(value) || 0;
+  }
+
+  newItems[index] = { ...newItems[index], [name]: parsedValue };
+
+  if (name !== 'amount') {
+    const weight = parseFloat(newItems[index].weight) || 0;
+    const docketCharges = parseFloat(newItems[index].docketCharges) || 0;
+    newItems[index].amount = weight * 10 + docketCharges; // ₹10/kg + docketCharges
+  }
+
+  setFormData(prev => ({ ...prev, items: newItems }));
+};
 
   // Add new item row
   const addItem = () => {
@@ -158,7 +164,9 @@ const InvoiceGenerator = () => {
   const { subtotal, tax, total } = calculateTotals();
 
   return (
+    
     <div className="invoice-generator">
+      
       {!generatedInvoice ? (
         <Form onSubmit={generateInvoice} className="invoice-form">
           <div className="form-section">
@@ -346,14 +354,23 @@ const InvoiceGenerator = () => {
       ) : (
         <div className="invoice-preview">
           <div className="print-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+             <QRCodeCanvas
+      value={`Invoice No: ${generatedInvoice.invoiceNumber}\nAmount: ₹${total.toFixed(2)}\nBank Name: IDFC FIRST BANK\nAccount: 10068320097\nIFSC: IDFB0040101\nGSTIN: 09AACCW9017C1ZD`}
+      size={100}
+      bgColor="#ffffff"
+      fgColor="#000000"
+      level="M"
+    />
             <div className="company-info">
               <h2>TAX INVOICE</h2>
               <h3>WORTH CART PRIVATE LTD.</h3>
               <p>A-280, GF, Transport Nagar, Sector 69, Noida-201301</p>
               <p>GSTIN: 09AACCW9017C1ZD | PAN: AACCW9017C</p>
-              <p>Email: sales@wortheartindia.com | Phone: +91-9773950512</p>
+              <p>Email: sales@worthcartindia.com | Phone: +91-9990370943</p>
             </div>
             <img src={logo} alt="Logo" style={{ width: 130, height: 130, objectFit: "contain" }} />
+
+            
           </div>
               {/* Invoice number and date in one line */}
           <div className="invoice-header">
@@ -458,24 +475,25 @@ const InvoiceGenerator = () => {
             </ol>
           </div>
 
-          <div className="payment-details">
-            <div>
-              <h5>Payments Details:</h5>
-              <p>IDFC FIRST BANK</p>
-              <p>WORTH CART PRIVATE LIMITED</p>
-              <p>ACCOUNT NO: 10068320097</p>
-              <p>IFSC CODE: IDFB0040101</p>
-            </div>
-           <div className="signature">
-  <p>For WORTH CART PRIVATE LTD</p>
-  <img
-    src={signature}
-    alt="Authorized Signature"
-    style={{ width: '120px', height: 'auto', margin: '10px 0' }}
-  />
-  <p>Authorised Signatory</p>
+         <div className="payment-details-container">
+  <div className="payment-left">
+    <h5>Payments Details:</h5>
+    <p>IDFC FIRST BANK</p>
+    <p>WORTH CART PRIVATE LIMITED</p>
+    <p>ACCOUNT NO: 10068320097</p>
+    <p>IFSC CODE: IDFB0040101</p>
+  </div>
+
+  <div className="signature">
+    <p>For WORTH CART PRIVATE LTD</p>
+    <img
+      src={signature}
+      alt="Authorized Signature"
+      style={{ width: '120px', height: 'auto', margin: '10px 0' }}
+    />
+    <p>Authorised Signatory</p>
+  </div>
 </div>
-          </div>
 
           <div className="invoice-actions">
   <Button color="secondary" onClick={() => setGeneratedInvoice(null)}>

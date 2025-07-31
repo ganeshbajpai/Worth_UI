@@ -4,91 +4,77 @@ import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 import './Header.css';
 
-
 const Header = ({ companyName, toggleSidebar }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [username, setUsername] = useState('');
+  const [showBanner, setShowBanner] = useState(true);
   const navigate = useNavigate();
-const [username, setUsername] = useState('');
- useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    try {
-      const decoded = jwtDecode(token); // ✅ Correct usage
-      setUsername(decoded.sub || decoded.username || "User");
-    } catch (error) {
-      console.error("Error decoding token:", error);
-    }
-  }
-}, []);
 
- // Logout function
-const handleLogout = () => {
-  const confirmLogout = window.confirm("Are you sure you want to logout?");
-  if (confirmLogout) {
-    localStorage.removeItem('token'); // Clear token
-    toast.success("You are logged out!!");
-   
-    navigate('/'); // Redirect to login
-  }
-};
-  // Update time every second
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUsername(decoded.sub || decoded.username || "User");
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
-
-    return () => clearInterval(timer); // Cleanup timer on unmount
+    return () => clearInterval(timer);
   }, []);
 
-  // Format the date with month in word format
   const formatDate = (date) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString(undefined, options);
+    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
-  // Navigate to home on logo or company name click
-  const goToHome = () => {
-    navigate('/main/home'); // Change this to your actual home route if different
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.removeItem('token');
+      toast.success("You are logged out!!");
+      navigate('/');
+    }
   };
+
+  const goToHome = () => navigate('/main/home');
 
   return (
-   <header className="header d-flex justify-content-between align-items-center fixed-top px-2 py-2">
-
-      <div className="d-flex align-items-center">
-        {/* Toggle Button */}
-        <button
-          onClick={toggleSidebar}
-          className="btn btn-sm btn-outline-light me-3"
-          title="Toggle Sidebar"
-        >
-          <i className="bi bi-list fs-4"></i> {/* Bootstrap icon or ☰ fallback */}
-        </button>
-
-        {/* Clickable Logo & Company Name */}
-        <div onClick={goToHome} style={{ cursor: 'pointer' }} className="d-flex align-items-center">
-          <img 
-            src="/icon.png" 
-            alt="Company Logo" 
-            className="logo me-2" 
-            style={{ width: '30px', height: '30px' }} 
-          />
-          <h1 className="m-0 fs-5">{companyName}</h1>
+    <>
+      <header className="header fixed-top d-flex justify-content-between align-items-center px-3 py-2">
+        <div className="d-flex align-items-center">
+          <div onClick={goToHome} style={{ cursor: 'pointer' }} className="d-flex align-items-center">
+            <img src="/icon.png" alt="Logo" className="logo me-2" style={{ width: '30px', height: '30px' }} />
+            <h1 className="m-0 fs-5">{companyName}</h1>
+          </div>
         </div>
-      </div>
 
-     <h2 className="m-0 fs-5 text-center">
-  Welcome, {username}
-</h2>
+        <h2 className="m-0 fs-6 text-center">Welcome, {username}</h2>
 
-      <div className="d-flex align-items-center">
-        <div className="me-3 small">
-          {formatDate(currentTime)} {currentTime.toLocaleTimeString()}
+        <div className="d-flex align-items-center">
+          <div className="me-3 small">{formatDate(currentTime)} {currentTime.toLocaleTimeString()}</div>
+          <button onClick={handleLogout} className="btn btn-sm btn-outline-light">Logout</button>
         </div>
-        <button onClick={handleLogout} className="btn btn-sm btn-outline-light">
-          Logout
-        </button>
-      </div>
-    </header>
+      </header>
+
+      {/* Banner placed below header */}
+      {showBanner && (
+  <div className="scroll-banner shimmer-banner text-dark d-flex align-items-center justify-content-between px-3 py-1">
+    <div className="scroll-text">
+      🚚 Welcome to the Logistics Portal! Stay tuned for updates and announcements.
+    </div>
+    <button
+      onClick={() => setShowBanner(false)}
+      className="btn btn-sm btn-close ms-3"
+      aria-label="Close"
+    ></button>
+  </div>
+)}
+    </>
   );
 };
 

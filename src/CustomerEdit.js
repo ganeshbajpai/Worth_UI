@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, FormGroup, Label, Input, Form } from "reactstrap";
 import customer_url from "./api/customerapi";
-import './CustomerEdit.css';
+import "./CustomerEdit.css";
 
 const CustomerEdit = () => {
   const { custId } = useParams();
-  const [validation, setValidation] = useState(false);
+  // const [validation, setValidation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [countries, setCountries] = useState([]);
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
 
   const [formData, setFormData] = useState({
     customerId: "",
@@ -24,94 +21,27 @@ const CustomerEdit = () => {
     contactNumber: "",
     emailId: "",
     gstNo: "",
-    active: true
+    active: true,
   });
 
   const navigate = useNavigate();
 
-  // Load all countries on initial render
-  useEffect(() => {
-    fetch("https://countriesnow.space/api/v0.1/countries/positions")
-      .then(res => res.json())
-      .then(data => {
-        if (data.data) setCountries(data.data.map(c => c.name));
-      })
-      .catch(console.error);
-  }, []);
-
-  // Fetch customer data and initialize state/city data
+  // Load existing customer data
   useEffect(() => {
     fetch(`${customer_url}/customer/customerDetails/${custId}`)
-      .then(resp => {
-        if (!resp.ok) throw new Error('Failed to fetch customer details');
+      .then((resp) => {
+        if (!resp.ok) throw new Error("Failed to fetch customer details");
         return resp.json();
       })
-      .then(async resp => {
+      .then((resp) => {
         setFormData(resp);
-        await loadInitialLocationData(resp.country, resp.state);
       })
-      .catch(err => console.log(err.message));
+      .catch((err) => console.log(err.message));
   }, [custId]);
-
-  // Load states and cities when editing an existing customer
-  const loadInitialLocationData = async (country, state) => {
-    if (country) {
-      const resStates = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ country }),
-      });
-      const dataStates = await resStates.json();
-      if (dataStates.data?.states) {
-        setStates(dataStates.data.states.map(s => s.name));
-      }
-    }
-
-    if (country && state) {
-      const resCities = await fetch("https://countriesnow.space/api/v0.1/countries/state/cities", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ country, state }),
-      });
-      const dataCities = await resCities.json();
-      if (dataCities.data) {
-        setCities(dataCities.data);
-      }
-    }
-  };
-
-  const handleCountryChange = async (e) => {
-    const country = e.target.value;
-    setFormData(prev => ({ ...prev, country, state: "", city: "" }));
-    setStates([]);
-    setCities([]);
-
-    const res = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ country }),
-    });
-    const data = await res.json();
-    if (data.data?.states) setStates(data.data.states.map(s => s.name));
-  };
-
-  const handleStateChange = async (e) => {
-    const state = e.target.value;
-    setFormData(prev => ({ ...prev, state, city: "" }));
-    setCities([]);
-
-    const res = await fetch("https://countriesnow.space/api/v0.1/countries/state/cities", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ country: formData.country, state }),
-    });
-    const data = await res.json();
-    if (data.data) setCities(data.data);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -120,13 +50,17 @@ const CustomerEdit = () => {
     fetch(`${customer_url}/customer/updateCustomer/${custId}`, {
       method: "PUT",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     })
-      .then(() => {
+      .then((resp) => {
+        if (!resp.ok) throw new Error("Failed to update customer");
         alert("Updated successfully");
         navigate("/main/customer");
       })
-      .catch(err => console.log(err.message))
+      .catch((err) => {
+        console.error(err.message);
+        alert("Update failed: " + err.message);
+      })
       .finally(() => setIsLoading(false));
   };
 
@@ -139,15 +73,18 @@ const CustomerEdit = () => {
               <div className="card-header bg-primary text-white p-2">
                 <h6 className="mb-0">Edit Customer</h6>
               </div>
-
               <div className="card-body p-3">
                 <div className="row g-2">
-
                   {/* Left Column */}
                   <div className="col-md-6">
                     <FormGroup className="mb-2">
                       <Label className="small fw-bold">Customer ID</Label>
-                      <Input name="customerId" value={formData.customerId} disabled className="form-control-sm" />
+                      <Input
+                        name="customerId"
+                        value={formData.customerId}
+                        disabled
+                        className="form-control-sm"
+                      />
                     </FormGroup>
 
                     <FormGroup className="mb-2">
@@ -157,13 +94,9 @@ const CustomerEdit = () => {
                         value={formData.companyName}
                         onChange={handleChange}
                         disabled
-                        onMouseDown={() => setValidation(true)}
                         className="form-control-sm"
                         required
                       />
-                      {validation && !formData.companyName && (
-                        <small className="text-danger">Enter Company Name</small>
-                      )}
                     </FormGroup>
 
                     <FormGroup className="mb-2">
@@ -180,35 +113,25 @@ const CustomerEdit = () => {
                     <FormGroup className="mb-2">
                       <Label className="small fw-bold">State</Label>
                       <Input
-                        type="select"
+                        type="text"
                         name="state"
                         value={formData.state}
-                        onChange={handleStateChange}
+                        onChange={handleChange}
                         className="form-control-sm"
                         required
-                      >
-                        <option value="">-- Select State --</option>
-                        {states.map((s, idx) => (
-                          <option key={idx} value={s}>{s}</option>
-                        ))}
-                      </Input>
+                      />
                     </FormGroup>
 
                     <FormGroup className="mb-2">
                       <Label className="small fw-bold">City</Label>
                       <Input
-                        type="select"
+                        type="text"
                         name="city"
                         value={formData.city}
                         onChange={handleChange}
                         className="form-control-sm"
                         required
-                      >
-                        <option value="">-- Select City --</option>
-                        {cities.map((c, idx) => (
-                          <option key={idx} value={c}>{c}</option>
-                        ))}
-                      </Input>
+                      />
                     </FormGroup>
                   </div>
 
@@ -217,18 +140,13 @@ const CustomerEdit = () => {
                     <FormGroup className="mb-2">
                       <Label className="small fw-bold">Country</Label>
                       <Input
-                        type="select"
+                        type="text"
                         name="country"
                         value={formData.country}
-                        onChange={handleCountryChange}
+                        onChange={handleChange}
                         className="form-control-sm"
                         required
-                      >
-                        <option value="">-- Select Country --</option>
-                        {countries.map((c, idx) => (
-                          <option key={idx} value={c}>{c}</option>
-                        ))}
-                      </Input>
+                      />
                     </FormGroup>
 
                     <FormGroup className="mb-2">
@@ -257,7 +175,7 @@ const CustomerEdit = () => {
                     <FormGroup className="mb-2">
                       <Label className="small fw-bold">Contact Number</Label>
                       <Input
-                        type="number"
+                        type="tel"
                         name="contactNumber"
                         value={formData.contactNumber}
                         onChange={handleChange}
@@ -291,13 +209,23 @@ const CustomerEdit = () => {
                   {/* Buttons */}
                   <div className="col-12 mt-2">
                     <div className="d-flex gap-2">
-                      <Button type="submit" color="primary" size="sm" disabled={isLoading} className="px-3">
-                        {isLoading ? 'Updating...' : 'Update'}
+                      <Button
+                        type="submit"
+                        color="primary"
+                        size="sm"
+                        disabled={isLoading}
+                        className="px-3"
+                      >
+                        {isLoading ? "Updating..." : "Update"}
                       </Button>
-                      <Link to="/main/customer" className="btn btn-sm btn-outline-secondary px-3">Back</Link>
+                      <Link
+                        to="/main/customer"
+                        className="btn btn-sm btn-outline-secondary px-3"
+                      >
+                        Back
+                      </Link>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>

@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Container, Col, Row } from "reactstrap";
-
+import BookingDetailsPage from './BookingDetailsPage';
 import CustomerListing from "./CustomerListing";
 import CustomerCreate from "./CustomerCreate";
 import CustomerDetails from "./CustomerDetails";
@@ -49,8 +49,8 @@ function App() {
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       <Container>
         <Row>
-          <Col md={2}></Col>
-          <Col md={10}>
+          <Col md={1}></Col>
+          <Col md={11}>
             <Router>
               
               <Routes>
@@ -75,7 +75,7 @@ function App() {
                   <Route path="booking/details/:bookId" element={<BookingDetails />} />
                   <Route path="booking/edit/:bookId" element={<BookingEdit />} />
                   <Route path="change-password" element={<ChangePassword />} />
-                 
+                 <Route path="/main/booking/:id" element={<BookingDetailsPage />} />
                 </Route>
               </Routes>
             </Router>

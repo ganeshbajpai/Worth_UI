@@ -88,6 +88,12 @@ const CustomerDetails = () => {
             <h6 className="customer-subheading">Contact: {custdata.contactNumber}</h6>
             <h6 className="customer-subheading">Email Id: {custdata.emailId}</h6>
             <h6 className="customer-subheading">GSTIN: {custdata.gstNo}</h6>
+            <h6 className="customer-subheading">
+  Registered On:{" "}
+  {custdata.registrationDateTime
+    ? new Date(custdata.registrationDateTime).toLocaleString()
+    : "N/A"}
+</h6>
           </div>
         )}
 

@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Input, FormGroup, Label, Form } from "reactstrap";
 import './BookingEdit.css';
 import booking_url from "./api/bookingApi";
-// import PodUploadForm from "./PodUploadForm";
 
 const BookingEdit = () => {
   const { bookId } = useParams();
@@ -34,14 +33,35 @@ const BookingEdit = () => {
     trackLocation: ""
   });
 
+  // Function to get current date and time
+   const updateCurrentDateTime = () => {
+    const now = new Date();
+    setFormData(prev => ({
+      ...prev,
+      date: now.toISOString().split('T')[0],
+      time: now.toTimeString().slice(0, 5)
+    }));
+  };
+
   useEffect(() => {
+    // First set current date/time immediately
+    updateCurrentDateTime();
+    
+    // Then fetch booking data
     fetch(`${booking_url}/booking/booking/` + bookId)
       .then(resp => resp.json())
-      .then(resp => setFormData(resp))
+      .then(resp => {
+        setFormData(prev => ({
+          ...resp,
+          // Only keep current date/time if no existing values
+          date: resp.date || prev.date,
+          time: resp.time || prev.time
+        }));
+      })
       .catch(err => console.log(err.message));
   }, [bookId]);
 
-  const handleChange = (e) => {
+   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -175,8 +195,6 @@ const BookingEdit = () => {
                         className="form-control form-control-sm"
                       />
                     </FormGroup>
-                    
-                    {/* <PodUploadForm bookingId={bookId} className="mb-2" /> */}
                   </div>
 
                   {/* Action buttons */}

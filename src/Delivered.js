@@ -11,7 +11,8 @@ const Delivered = () => {
   const [postsPerPage] = useState(5);
   const [bookdata, setBookdata] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  
+  const [loading, setLoading] = useState(false);
+
 
   // const LoadDetails = (bookingId) => {
   //   navigate("/main/booking/details/" + bookingId);
@@ -82,24 +83,27 @@ const Delivered = () => {
   };
 
   useEffect(() => {
-    fetch(`${booking_url}/booking/bookings/delivered`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch delivered bookings");
-        }
-        return res.json();
-      })
-      .then((resp) => {
-        const data = Array.isArray(resp) ? resp : resp.data || [];
-        setBookdata(data);
-        // toast.success("Delivered bookings loaded");
-      })
-      .catch((err) => {
-        console.error(err.message);
-        setBookdata([]);
-        toast.error("Failed to load bookings. Please check the API.");
-      });
-  }, []);
+  setLoading(true);
+  fetch(`${booking_url}/booking/bookings/delivered`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed to fetch delivered bookings");
+      }
+      return res.json();
+    })
+    .then((resp) => {
+      const data = Array.isArray(resp) ? resp : resp.data || [];
+      setBookdata(data);
+    })
+    .catch((err) => {
+      console.error(err.message);
+      setBookdata([]);
+      toast.error("Failed to load bookings. Please check the API.");
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+}, []);
 
   const filteredData = Array.isArray(bookdata)
     ? bookdata.filter(item =>
@@ -129,6 +133,13 @@ const Delivered = () => {
             className="ml-2"
           />
         </div>
+        <div className="table-container-scroll">
+  {loading ? (
+    <div className="text-center">
+      <div className="spinner"></div>
+      <p>Loading bookings...</p>
+    </div>
+  ) : (
         <Table bordered>
           <thead>
             <tr>
@@ -197,6 +208,9 @@ const Delivered = () => {
             )}
           </tbody>
         </Table>
+
+         )}
+</div>
         <ul className="pagination">
           <li className="page-item">
             <button

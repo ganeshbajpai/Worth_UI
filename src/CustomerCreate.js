@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Form, FormGroup, Label, Input, Alert, Spinner } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Spinner } from 'reactstrap';
 import customer_url from './api/customerapi';
 import './CustomerCreate.css';
 import { toast } from "react-toastify";
+
 const CustomerCreate = () => {
   const [formData, setFormData] = useState({
     companyName: '',
@@ -22,60 +23,9 @@ const CustomerCreate = () => {
   const [companyExists, setCompanyExists] = useState(false);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [countries, setCountries] = useState([]);
-  const [statesList, setStatesList] = useState([]);
-  const [citiesList, setCitiesList] = useState([]);
+
   const navigate = useNavigate();
 
-  // Load countries
-  useEffect(() => {
-    fetch("https://countriesnow.space/api/v0.1/countries/positions")
-      .then(res => res.json())
-      .then(data => {
-        if (data.data) setCountries(data.data.map(c => c.name));
-      })
-      .catch(console.error);
-  }, []);
-
-  // Load states when country changes
-  useEffect(() => {
-    if (formData.country) {
-      fetch("https://countriesnow.space/api/v0.1/countries/states", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ country: formData.country }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.data?.states) setStatesList(data.data.states.map(s => s.name));
-        })
-        .catch(console.error);
-    } else {
-      setStatesList([]);
-    }
-    setFormData(prev => ({ ...prev, state: '', city: '' }));
-  }, [formData.country]);
-
-  // Load cities when state changes
-  useEffect(() => {
-    if (formData.country && formData.state) {
-      fetch("https://countriesnow.space/api/v0.1/countries/state/cities", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ country: formData.country, state: formData.state }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.data) setCitiesList(data.data);
-        })
-        .catch(console.error);
-    } else {
-      setCitiesList([]);
-    }
-    setFormData(prev => ({ ...prev, city: '' }));
-  }, [formData.state]);
-
-  // Debounce company name check
   useEffect(() => {
     const timer = setTimeout(() => {
       if (formData.companyName) {
@@ -121,38 +71,39 @@ const CustomerCreate = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (companyExists) {
-      setErrors(prev => ({ ...prev, companyName: 'Company already exists' }));
-      return;
-    }
+  e.preventDefault();
+  if (companyExists) {
+    setErrors(prev => ({ ...prev, companyName: 'Company already exists' }));
+    return;
+  }
 
-    if (validateForm()) {
-      setIsLoading(true);
-      fetch(`${customer_url}/customer/addCustomer`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+  if (validateForm()) {
+    setIsLoading(true);
+    fetch(`${customer_url}/customer/addCustomer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to add customer');
+
+        toast.success("Customer created successfully");
+        // setFormData(initialState); // Clear form
+        navigate('/main/customer'); // Navigate (toast will still show if <ToastContainer /> is global)
       })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to add customer');
-          // alert('Customer created successfully');
-          toast.success("Customer created successfully");
-          navigate('/main/customer');
-        })
-        .catch(err => {
-          console.error(err.message);
-          Alert.error('Failed to create customer');
-        })
-        .finally(() => setIsLoading(false));
-    }
-  };
+      .catch(err => {
+        console.error(err.message);
+        toast.error("Failed to create customer");
+      })
+      .finally(() => setIsLoading(false));
+  }
+};
+
 
   return (
     <div className="customer-create-container">
       <div className="form-header">
-        <h5>New Customer Registration</h5>
-        <p className="text-muted">Fill in the details to create a new customer</p>
+        <h5 className="table-blur-container"> New Customer Registration</h5>
       </div>
 
       <Form onSubmit={handleSubmit} className="compact-form">
@@ -195,17 +146,12 @@ const CustomerCreate = () => {
               <Input
                 id="country"
                 name="country"
-                type="select"
+                type="text"
                 value={formData.country}
                 onChange={handleChange}
                 invalid={!!errors.country}
                 className="form-input"
-              >
-                <option value="">Select Country</option>
-                {countries.map((c, i) => (
-                  <option key={i} value={c}>{c}</option>
-                ))}
-              </Input>
+              />
               {errors.country && <small className="text-danger">{errors.country}</small>}
             </FormGroup>
 
@@ -214,18 +160,12 @@ const CustomerCreate = () => {
               <Input
                 id="state"
                 name="state"
-                type="select"
+                type="text"
                 value={formData.state}
                 onChange={handleChange}
                 invalid={!!errors.state}
                 className="form-input"
-                disabled={!formData.country}
-              >
-                <option value="">Select State</option>
-                {statesList.map((s, i) => (
-                  <option key={i} value={s}>{s}</option>
-                ))}
-              </Input>
+              />
               {errors.state && <small className="text-danger">{errors.state}</small>}
             </FormGroup>
 
@@ -234,18 +174,12 @@ const CustomerCreate = () => {
               <Input
                 id="city"
                 name="city"
-                type="select"
+                type="text"
                 value={formData.city}
                 onChange={handleChange}
                 invalid={!!errors.city}
                 className="form-input"
-                disabled={!formData.state}
-              >
-                <option value="">Select City</option>
-                {citiesList.map((c, i) => (
-                  <option key={i} value={c}>{c}</option>
-                ))}
-              </Input>
+              />
               {errors.city && <small className="text-danger">{errors.city}</small>}
             </FormGroup>
 

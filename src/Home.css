@@ -33,3 +33,168 @@
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+.shortcut-buttons {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.shortcut {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.shortcut:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Individual button styles */
+.create-booking {
+  background: linear-gradient(to right, #4CAF50, #81C784);
+}
+
+.create-customer {
+  background: linear-gradient(to right, #2196F3, #64B5F6);
+}
+
+.in-transit {
+  background: linear-gradient(to right, #FF9800, #FFB74D);
+}
+.delivered {
+  background: linear-gradient(to right, #4CAF50, #81C784);
+}
+.shortcut-buttons .shortcut {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.shortcut:hover {
+  background-color: #e2e6ea;
+  cursor: pointer;
+}
+
+.search-form input {
+  width: 180px;
+}
+.shortcut-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.shortcut {
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  background-color: #e9ecef;
+  transition: background-color 0.2s ease;
+}
+
+.shortcut:hover {
+  background-color: #d6d8db;
+  cursor: pointer;
+}
+
+.search-booking input {
+  width: 250px;
+}
+.dashboard {
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  max-width: 1000px;
+  margin: auto;
+}
+
+.table-blur-container {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.shortcut-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.shortcut {
+  background: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shortcut:hover {
+  background: #f0f4ff;
+  border-color: #aac4ff;
+  transform: translateY(-2px);
+  color: #2a4d9f;
+}
+
+.search-booking {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  gap: 12px;
+}
+
+.search-booking input.form-control {
+  max-width: 300px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.search-booking .btn {
+  background-color: #2a4d9f;
+  border: none;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.search-booking .btn:hover {
+  background-color: #1f3a7c;
+}
+body {
+  font-family: 'Inter', sans-serif;
+}

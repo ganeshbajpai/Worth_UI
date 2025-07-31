@@ -1,54 +1,235 @@
-/* Glassmorphic Header Style */
+/* ------------------- Glassmorphic Header ------------------- */
 .header {
-  background: rgba(38, 48, 67, 0.35); /* Soft transparent dark */
-  backdrop-filter: blur(14px); /* Frosted glass effect */
-  -webkit-backdrop-filter: blur(14px); /* Safari support */
-  color: #ffffff;
+  background: rgba(38, 48, 67, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #fff;
   padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer shadow for elevation */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1050;
   min-width: 250px;
 }
 
-/* Logo image */
+/* ------------------- Logo Animation ------------------- */
 .header .logo {
   width: 30px;
   height: 30px;
   object-fit: contain;
+  animation: pulseLogo 2s ease-in-out infinite;
+  transition: transform 0.4s ease;
+}
+.header .logo:hover {
+  animation: spinLogo 1.5s linear infinite;
+  transform: scale(1.2);
 }
 
-/* Company name */
+@keyframes pulseLogo {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes spinLogo {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ------------------- Company Name Bounce ------------------- */
 .header h1 {
   font-size: 1.2rem;
   margin-left: 10px;
   color: #ffffff;
+  animation: bounceIn 1.5s ease;
+  transition: transform 0.3s;
+}
+.header h1:hover {
+  transform: scale(1.1);
 }
 
-/* Username greeting */
+@keyframes bounceIn {
+  0% { transform: translateX(-20px); opacity: 0; }
+  60% { transform: translateX(0); opacity: 1; }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+/* ------------------- User Greeting ------------------- */
 .header h2 {
   font-size: 1rem;
   margin: 0;
   color: #ffffff;
 }
 
-/* Time and logout button section */
+/* ------------------- Button & Time ------------------- */
 .header .small {
   font-size: 0.85rem;
   color: #e0e0e0;
 }
-
-/* Logout button and toggle button */
 .header .btn-outline-light {
   color: #ffffff;
   border-color: rgba(255, 255, 255, 0.4);
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
-
 .header .btn-outline-light:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
+}
+
+/* ------------------- Scroll Banner ------------------- */
+.running-banner {
+  background-color: #0d6efd;
+  color: white;
+  padding: 5px 0;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  position: fixed;
+  margin-top: 100px;
+  width: 100%;
+  z-index: 999;
+}
+.running-banner span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scrollText 15s linear infinite;
+}
+@keyframes scrollText {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-100%); }
+}
+
+/* ------------------- Skeleton Loaders with Shimmer ------------------- */
+.skeleton {
+  background: #2d3e50;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  min-height: 20px;
+  margin: 8px 0;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  100% { left: 100%; }
+}
+
+/* ------------------- Ripple Loading Bars ------------------- */
+.ripple-loader {
+  display: flex;
+  gap: 6px;
+}
+.ripple-loader .bar {
+  width: 5px;
+  height: 20px;
+  background-color: #0d6efd;
+  animation: rippleBar 1s ease-in-out infinite;
+  border-radius: 4px;
+}
+.ripple-loader .bar:nth-child(1) { animation-delay: 0s; }
+.ripple-loader .bar:nth-child(2) { animation-delay: 0.1s; }
+.ripple-loader .bar:nth-child(3) { animation-delay: 0.2s; }
+.ripple-loader .bar:nth-child(4) { animation-delay: 0.3s; }
+.ripple-loader .bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes rippleBar {
+  0%, 100% { transform: scaleY(0.8); opacity: 0.5; }
+  50% { transform: scaleY(1.5); opacity: 1; }
+}
+
+/* ------------------- Animated Buttons ------------------- */
+.btn-animated {
+  background-color: #0d6efd;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-animated:hover {
+  background-color: #084ec1;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.5);
+}
+
+/* ------------------- Media Query ------------------- */
+@media (max-width: 768px) {
+  .logo {
+    animation: none;
+    transform: scale(1);
+  }
+}
+/* Banner just below header */
+.scroll-banner {
+   margin-top: 35px; 
+
+  width: 100%;
+  position: relative;
+  z-index: 999;
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: #ffc107;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+/* Scrolling shimmer animation */
+.shimmer-banner .scroll-text {
+  animation: shimmerMove 20s linear infinite;
+  display: inline-block;
+  padding-left: 100%;
+}
+
+
+/* Button to close banner */
+.scroll-banner .btn-close {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Shimmer animation keyframes */
+@keyframes shimmerMove {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Optional: Adjust shimmer effect look */
+.scroll-banner.shimmer-banner {
+  background: linear-gradient(90deg, #ffc107 25%, #fff3cd 50%, #ffc107 75%);
+  background-size: 400% 100%;
+  animation: shimmerBackground 6s linear infinite;
+}
+
+/* Optional shimmer background animation */
+@keyframes shimmerBackground {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
 }
